@@ -8,9 +8,9 @@ DATA_PATH="/home/datasets/"
 BEGUM_PATH="/home/altb/datasets/argo2"
 # WAYMO_DATA_PATH="/home/altb/datasets/waymo_processed"
 #CODE_PATH="/home/ubuntu/BegumGorkem/MS3D"
-CODE_PATH="/home/altb/idp-ms3d"
+# CODE_PATH="/home/altb/idp-ms3d"
 
-COPY_PATH="/home/altb/automatedpclabelling"
+CODE_PATH="/home/altb/automatedpclabelling"
 #CODE_PATH='/home/altb/OpenPCDet'
 
 GPU_ID="0,1"
@@ -20,9 +20,8 @@ ENVS="  --env=NVIDIA_VISIBLE_DEVICES=$GPU_ID
         --env=NVIDIA_DRIVER_CAPABILITIES=all"
 
 VOLUMES="       --volume=$DATA_PATH:/MS3D/data_temp
-                --volume=$BEGUM_PATH:/MS3D/data_temp/argo
-                --volume=$COPY_PATH:/pclabelling"
-
+                --volume=$BEGUM_PATH:/MS3D/data_temp/argo"
+                # --volume=$COPY_PATH:/pclabelling"
                 # --volume=$WAYMO_DATA_PATH:/MS3D/data_temp/waymo
         
 

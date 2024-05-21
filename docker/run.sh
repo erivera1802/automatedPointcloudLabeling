@@ -39,7 +39,7 @@ echo "Running the docker image [GPUS: ${GPU_ID}]"
 docker_image="begumaltunbas/openpcdet:cuda11_ms3d_v2"
 
 # Start docker image
-docker  run --name copy-ms3d-container -d -it --rm \
+docker  run --name ms3d-container -d -it --rm \
 $VOLUMES \
 $ENVS \
 $VISUAL \

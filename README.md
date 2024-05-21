@@ -1,92 +1,162 @@
-# automatedPCLabelling
+# MS3D and MS3D++
+This is the official code release for
+- **MS3D**: Leveraging Multiple Detectors for Unsupervised Domain Adaptation in 3D Object Detection [[paper](https://arxiv.org/abs/2304.02431)]
+- **MS3D++**: Ensemble of Experts for Multi-Source Unsupervised Domain Adaptation in 3D Object Detection [[paper](https://arxiv.org/abs/2308.05988)] [[presentation](https://youtu.be/gjOgirSks8I?si=i0SMDmqcOrIB2Y49)]
+
+## Introduction
+MS3D is a simple **auto-labeling** framework for vehicles and pedestrians that generates high quality labels for training 3D detectors on different lidar types, regardless of their scan pattern or point cloud density. 
+
+To auto-label your own point cloud data, see our [**guide**](docs/AUTO_LABEL_YOUR_DATA.md). 
+
+Get a quick understanding of MS3D with our [**explanation video**](https://youtu.be/7o5F4AMaIWo) and [**tutorial notebook**](tools/demo/ms3d_demo_tutorial.ipynb).
 
 
+<p align="center">
+  <img src="docs/media/ms3d++_framework.png">
+</p>
 
-## Getting started
+Our MS3D framework has the following benefits:
+- Robust labeling of a **wide range of lidars**. 
+- **High performance** of 3D detectors trained with MS3D labels, achieving BEV vehicle detection comparable to training with human-annotated labels.
+- **Tailor the ensemble** with any pre-trained 3D detectors to obtain high quality labels on any lidar dataset.
+- **Train any 3D detector with any data augmentation**. The final generated labels can replace human-annotated labels in supervised training of any 3D detector and data augmentation.
+- Preserves **real-time inference** capability of detectors as we don't modify detector architecture. 
+<br/>
+<p align="center">
+  <img src="docs/media/ms3d++_qualitative_tgt_waymo_720p_10s.gif", width=625>
+</p>
+<p align="center">
+  <img src="docs/media/ms3d++_qualitative_tgt_nuscenes.gif", width=625>
+</p>
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Our **box fusion method, KBF,** can be used for detector ensembling in a supervised setting as well and can outperform [Weighted Box Fusion (WBF)](https://github.com/ZFTurbo/Weighted-Boxes-Fusion). See our first MS3D paper for comparison results and a simple demo [here](tools/demo/kbf_demo.ipynb).
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+This main branch is the official release for MS3D++ and is built upon OpenPCDet v0.6.0. If you wish to use our previous MS3D code, please refer to the [MS3D branch](https://github.com/darrenjkt/MS3D/tree/ms3d).
 
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.lrz.de/perception/automatedpclabelling.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.lrz.de/perception/automatedpclabelling/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Overview
+1. [Installation](#installation)
+2. [Usage: Auto-labeling](#usage-auto-labeling)
+3. [Pre-trained Model Zoo](#pre-trained-model-zoo)
+4. [UDA Model Zoo](#uda-model-zoo)
+5. [Citation](#citation)
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Please refer to [INSTALL.md](docs/INSTALL.md) for the installation of MS3D.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+## Usage: Auto-labeling
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+We provide the following guides to learn how to use MS3D.
+- [GETTING_STARTED.md](docs/GETTING_STARTED.md) to reproduce our paper results. 
+- [AUTO_LABEL_YOUR_DATA.md](docs/AUTO_LABEL_YOUR_DATA.md) to auto-label your own point cloud data.
+- [PARAMETERS.md](docs/MS3D_PARAMETERS.md) to tune MS3D config file parameters.
+- [VISUALIZATION.md](docs/VISUALIZATION.md) to use our visualization tools for label assessment.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+We provide a [tutorial](tools/demo/ms3d_demo_tutorial.ipynb) to demonstrate how MS3D auto-labels a folder of point clouds. 
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Pre-trained Model Zoo
+In this section, we provide a collection of pre-trained (aka. off-the-shelf) models that can be used to reproduce our results or label your own datasets. If you wish to download multiple detectors, we provide links to download the entire folder of detectors trained on [nuScenes](https://drive.google.com/drive/folders/1hCB5ODFUBqnwwjDO7hdpHq6qgQFaAG72?usp=sharing) and [Lyft](https://drive.google.com/drive/folders/12vVM6WtjG38SjUNhhkgy3ZvkZZDm2Edh?usp=sharing) to save some time.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Reported 3D average precision is the **oracle** performance for the range breakdown 0-30m / 30-50m / 50-80m when trained and tested on the same dataset.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+|Source | Detector | Sweeps | Vehicle | Pedestrian | Download |
+| ----- | :-----:| :-----:| :--------: | :-----: | :-----: |
+| Lyft | [PV-RCNN++ (Anchor)](tools/cfgs/lyft_models/uda_pv_rcnn_plusplus_resnet_anchorhead.yaml) | 1 | 88.9 / 68.2 / 25.0 | 55.1 / 26.8 / 11.9 | [model](https://drive.google.com/file/d/1cgjraUNOaTnargawTHI0-uYHqwA3NgJL/view?usp=sharing) |
+| Lyft | [PV-RCNN++ (Center)](tools/cfgs/lyft_models/uda_pv_rcnn_plusplus_resnet_centerhead.yaml) | 1 | 87.1 / 66.2 / 23.6 | 50.0 / 27.7 / 10.5 | [model](https://drive.google.com/file/d/1H6736zF9v4DuHXUmuHDsq3sqG03vXi5T/view?usp=sharing) |
+| Lyft | [VoxelRCNN (Anchor)](tools/cfgs/lyft_models/uda_voxel_rcnn_anchorhead.yaml) | 1 | 87.8 / 66.3 / 22.5 | 54.5 / 29.8 / 10.8 | [model](https://drive.google.com/file/d/1Sb5Ik6mTZKhJVXTsi6ilnFZ4n_SMd9L-/view?usp=sharing) |
+| Lyft | [VoxelRCNN (Center)](tools/cfgs/lyft_models/uda_voxel_rcnn_centerhead.yaml) | 1 | 88.6 / 66.9 / 22.8 | 52.5 / 27.3 / 11.0 | [model](https://drive.google.com/file/d/1mg71L8tdgBc6uuJTpeS3qqef3zI35KfN/view?usp=sharing) |
+| Lyft | [PV-RCNN++ (Anchor)](tools/cfgs/lyft_models/uda_pv_rcnn_plusplus_resnet_anchorhead.yaml) | 3 | 90.3 / 73.3 / 29.0 | 57.0 / 33.4 / 19.2 | [model](https://drive.google.com/file/d/1hMtGI8cK9PMiRVcgYyk3mjqjsHzhvN1B/view?usp=sharing) |
+| Lyft | [PV-RCNN++ (Center)](tools/cfgs/lyft_models/uda_pv_rcnn_plusplus_resnet_centerhead.yaml) | 3 | 88.2 / 71.1 / 27.8 | 53.9 / 33.1 / 17.5 | [model](https://drive.google.com/file/d/1kzRGntBYMKETp0425zm-olih2eSg0__W/view?usp=sharing) |
+| Lyft | [VoxelRCNN (Anchor)](tools/cfgs/lyft_models/uda_voxel_rcnn_anchorhead.yaml) | 3 | 88.0 /79.7 / 26.2 | 57.8 / 36.6 / 18.9 | [model](https://drive.google.com/file/d/1s2-JPvzq7Vi2ScDD_3JqHqISa5nAiHCq/view?usp=sharing) |
+| Lyft | [VoxelRCNN (Center)](tools/cfgs/lyft_models/uda_voxel_rcnn_centerhead.yaml) | 3 | 88.0 / 70.4 / 26.3 | 59.5 / 34.4 / 18.9 | [model](https://drive.google.com/file/d/1Bluez8vYBWC1Eo_9a9k1L1Oigquds843/view?usp=sharing) |
+| Lyft | [IA-SSD](tools/cfgs/lyft_models/uda_IA-SSD.yaml) | 3 | 82.6 / 58.7 / 17.6 | 28.9 / 18.9 / 12.2 | [model](https://drive.google.com/file/d/1Gw31JFFUWFd94qqKzEY6zyr0q-x5qim3/view?usp=sharing) |
+| nuScenes | [PV-RCNN++ (Anchor)](tools/cfgs/nuscenes_models/uda_pv_rcnn_plusplus_resnet_anchorhead.yaml) | 10| 72.6 / 20.8 / 2.6 | 44.0 / 13.8 / 1.4 | [model](https://drive.google.com/file/d/1G6IdBNOtWiPaoNW_gKdHQnZcFO5Z_cGL/view?usp=sharing) |
+| nuScenes | [PV-RCNN++ (Center)](tools/cfgs/nuscenes_models/uda_pv_rcnn_plusplus_resnet_centerhead.yaml) | 10| 68.9 / 18.9 / 2.2 | 42.2 / 14.8 / 1.4 | [model](https://drive.google.com/file/d/1eTODH9OBUPtMcYK1yBY8XRIjexWU-ISV/view?usp=sharing) |
+| nuScenes | [VoxelRCNN (Anchor)](tools/cfgs/nuscenes_models/uda_voxel_rcnn_anchorhead.yaml) | 10 | 69.8 / 17.2 / 2.1 | 42.7 / 12.3 / 0.9 | [model](https://drive.google.com/file/d/1KePC1frVhxVnGaotxJNJmH51W0eU8603/view?usp=sharing) |
+| nuScenes | [VoxelRCNN (Center)](tools/cfgs/nuscenes_models/uda_voxel_rcnn_centerhead.yaml) | 10| 66.6 / 17.5 / 1.9 | 43.2 / 14.8 / 1.7 | [model](https://drive.google.com/file/d/1J1Sjoyptir-yJQxYv0PsCr20xIDGA7Pf/view?usp=sharing) |
+| nuScenes | [IA-SSD](tools/cfgs/nuscenes_models/uda_IA-SSD.yaml) | 10| 57.0 / 10.2 / 0.8 | 31.5 / 8.9 / 0.7 | [model](https://drive.google.com/file/d/1j1oEwfXOdNWElLcMz2mMljGchAMbBrCW/view?usp=sharing) |
+| Waymo | [PV-RCNN++ (Anchor)](tools/cfgs/waymo_models/uda_pv_rcnn_plusplus_resnet_anchorhead.yaml) | 1 | 90.2 / 66.4 / 38.8 | 68.3 / 57.2 / 39.0 | - |
+| Waymo | [PV-RCNN++ (Center)](tools/cfgs/waymo_models/uda_pv_rcnn_plusplus_resnet_centerhead.yaml) | 1 | 90.6 / 68.2 / 40.1 | 76.6 / 67.6 / 51.2 | - |
+| Waymo | [VoxelRCNN (Anchor)](tools/cfgs/waymo_models/uda_voxel_rcnn_anchorhead.yaml) | 1 | 89.9 / 65.3 / 37.0 | 67.9 / 56.2 / 36.1 | - |
+| Waymo | [VoxelRCNN (Center)](tools/cfgs/waymo_models/uda_voxel_rcnn_centerhead.yaml) | 1 | 90.2 / 67.9 / 39.3 | 76.0 / 66.8 / 48.8 | - |
+| Waymo | [IA-SSD](tools/cfgs/waymo_models/uda_IA-SSD.yaml) | 1 | 86.7 / 59.7 / 31.3 | 60.9 / 55.4 / 42.6 | - |
+| Waymo | [PV-RCNN++ (Anchor)](tools/cfgs/waymo_models/uda_pv_rcnn_plusplus_resnet_anchorhead.yaml) | 4 | 90.4 / 68.2 / 40.7 | 67.7 / 56.7 / 37.0 | - |
+| Waymo | [PV-RCNN++ (Center)](tools/cfgs/waymo_models/uda_pv_rcnn_plusplus_resnet_centerhead.yaml) | 4 | 91.1 / 70.1 / 42.3 | 75.9 / 68.1 / 53.0 | - |
+| Waymo | [VoxelRCNN (Anchor)](tools/cfgs/waymo_models/uda_voxel_rcnn_anchorhead.yaml) | 4 | 90.8 / 69.8 / 43.6 | 68.9 / 61.0 / 46.6 | - |
+| Waymo | [VoxelRCNN (Center)](tools/cfgs/waymo_models/uda_voxel_rcnn_centerhead.yaml) | 4 | 91.1 / 71.7 / 45.5 | 78.5 / 71.7 / 60.3 | - |
+
+If you would like to contribute to this table with different models that are trained on different datasets using OpenPCDet, please email me at darrenjktsai@gmail.com with the cfgs/model and I can add it in. Note that the models should be trained with `SHIFT_COOR` for better cross-domain performance.
+
+We do not provide links to Waymo models due to the [Waymo Dataset License Agreement](https://waymo.com/open/terms/). If you would like to have the Waymo pre-trained models, please send me an email with your name, institute, a screenshot of the Waymo dataset registration confirmation mail and your intended usage. Note that we are not allowed to share the model with you if it will use for any profit-oriented activities.
+
+## UDA Model Zoo
+
+In this section we provide the final models after multiple self-training rounds which were used for our paper's results. Average precision results are reported as BEV / 3D with KITTI's evaluation at 40 recall levels.
+
+We also provide the final set of pseudo-labels for each target domain. These can be directly used to train other detectors.
+
+### Target Domain: nuScenes
+
+nuScenes was auto-labeled using an ensemble of Waymo and Lyft pre-trained detectors. The final set of pseudo-labels can be downloaded [here](https://drive.google.com/file/d/1j7XABSc-LcfE8ytoPWkmnjaxLAtVLzAU/view?usp=sharing).
+
+|Method | Detector | Sweeps | Vehicle | Pedestrian | Download |
+| ----- | :-----:| :-----:| :--------: | :-----: | :-----: | 
+| MS3D | [SECOND-IoU]((tools/cfgs/target_nuscenes/ms3d_waymo_secondiou.yaml)) | 1 | 42.2 / 24.7 | - | [model](https://drive.google.com/file/d/1A3s9IWJFca2pwECHYreWuzvk-bd9UwO-/view?usp=sharing) |
+| MS3D++ | [SECOND-IoU](tools/cfgs/target_nuscenes/ms3d_waymo_secondiou.yaml) | 1 | 43.9 / 23.1 | - | [model](https://drive.google.com/file/d/105DTd_J0recMbxy9KLD_gOzWFXc1X6Df/view?usp=sharing) | 
+| MS3D | [VoxelRCNN (Center)](tools/cfgs/target_nuscenes/ms3d_waymo_voxel_rcnn_centerhead.yaml) | 10 | 49.2 / 27.5 | - | [model](https://drive.google.com/file/d/1syxMCeC3xoVmINQqwY23AkzYjuf2nUaD/view?usp=sharing) | 
+| MS3D++ | [VoxelRCNN (Center)](tools/cfgs/target_nuscenes/ms3d_waymo_voxel_rcnn_centerhead.yaml) | 10 | 50.3 / 27.2 | 25.8 / 15.9 | [model](https://drive.google.com/file/d/1xnNhbp5GTEZznunZrM1yEB3ci8bej8QJ/view?usp=sharing) |
+| MS3D++ | [VoxelRCNN (Anchor)](tools/cfgs/target_nuscenes/ms3d_waymo_voxel_rcnn_anchorhead.yaml) | 10 | 52.1 / 26.5 | 27.0 / 15.4 | [model](https://drive.google.com/file/d/1Bqthx1N3IC7MmPbbPM37CO9cw_9zsB7X/view?usp=sharing) | 
+| GT-Trained | [VoxelRCNN (Center)](tools/cfgs/target_nuscenes/ms3d_waymo_voxel_rcnn_centerhead.yaml) | 10 | 56.4 / 37.2 | 41.7 / 32.5 | [model](https://drive.google.com/file/d/1de-MFho9by0Z-hjIUx07RPr8Q1zbPNVz/view?usp=sharing) |
+| GT-Trained | [VoxelRCNN (Anchor)](tools/cfgs/target_nuscenes/ms3d_waymo_voxel_rcnn_anchorhead.yaml) | 10 | 55.3 / 36.6 | 38.3 / 29.7 | [model](https://drive.google.com/file/d/1LpXvAWKYedn07Efac0BiSRJaFRec3FZV/view?usp=sharing) | 
+
+### Target Domain: Waymo
+
+Waymo was auto-labeled using an ensemble of nuScenes and Lyft pre-trained detectors. The final set of pseudo-labels can be downloaded [here](https://drive.google.com/file/d/1ayt3JDC14X_m59_DwPvlzlMX10OkrFbE/view?usp=sharing).
+
+| Method | Detector | Sweeps | Vehicle | Pedestrian | Download |
+| ----- | :-----:| :-----:| :--------: | :-----: | :-----: | 
+| MS3D | [VoxelRCNN (Center)](tools/cfgs/target_waymo/ms3d_scratch_voxel_rcnn_centerhead.yaml) | 4 | 64.3 / 47.7 | - | - | 
+| MS3D++ | [VoxelRCNN (Center)](tools/cfgs/target_waymo/ms3d_scratch_voxel_rcnn_centerhead.yaml) | 4 | 70.6 / 52.8 | 57.0 / 51.8 | - |
+| MS3D++ | [VoxelRCNN (Anchor)](tools/cfgs/target_waymo/ms3d_scratch_voxel_rcnn_anchorhead.yaml) | 4 | 70.3 / 52.3 | 52.7 / 48.9 | - | 
+| GT-Trained | [VoxelRCNN (Center)](tools/cfgs/target_waymo/ms3d_scratch_voxel_rcnn_centerhead.yaml) | 4 | 75.1 / 61.2 | 67.8 / 62.9 | - |
+| GT-Trained | [VoxelRCNN (Anchor)](tools/cfgs/target_waymo/ms3d_scratch_voxel_rcnn_anchorhead.yaml) | 4 | 73.8 / 60.5 | 57.8 / 54.7 | - | 
+
+As mentioned above regarding Waymo's licensing, email me at darrenjktsai@gmail.com if you wish to download the Waymo models. You can also train these models yourself using our provided cfg files and pseudo-labels.
+
+### Target Domain: Lyft
+Lyft was auto-labeled using an ensemble of Waymo and nuScenes pre-trained detectors. The final set of pseudo-labels can be downloaded [here](https://drive.google.com/file/d/1WXm-8PJeUSZa165y5h9EtdKXvIhwD0N_/view?usp=sharing).
+
+|Method | Detector | Sweeps | Vehicle | Pedestrian | Download |
+| ----- | :-----:| :-----:| :--------: | :-----: | :-----: | 
+| MS3D | [VoxelRCNN (Center)](tools/cfgs/target_lyft/ms3d_waymo_voxel_rcnn_centerhead.yaml) | 3 | 77.3 / 63.4 | - | [model](tools/cfgs/target_lyft/ms3d_waymo_voxel_rcnn_centerhead.yaml) | 
+| MS3D++ | [VoxelRCNN (Center)](tools/cfgs/target_lyft/ms3d_waymo_voxel_rcnn_centerhead.yaml) | 3 | 77.0 /66.0 | 46.9 / 43.3 | [model](https://drive.google.com/file/d/1_YU0ODV0DzDby3oWvqMPdqgpdFT2xHcI/view?usp=sharing) |
+| MS3D++ | [VoxelRCNN (Anchor)](tools/cfgs/target_lyft/ms3d_waymo_voxel_rcnn_anchorhead.yaml) | 3 | 77.2 / 65.3 | 47.2 / 43.6 | [model](https://drive.google.com/file/d/1I8YEGDP3eLKkm6k9Hc8UJEeWaU2wWY0i/view?usp=sharing) | 
+| GT-Trained | [VoxelRCNN (Center)](tools/cfgs/target_lyft/ms3d_waymo_voxel_rcnn_centerhead.yaml) | 3 | 86.8 / 74.7 | 60.6 / 54.2 | [model](https://drive.google.com/file/d/1ttFSM8pGWkpSjuGI9RcCAyconGtH77BP/view?usp=sharing) |
+| GT-Trained | [VoxelRCNN (Anchor)](tools/cfgs/target_lyft/ms3d_waymo_voxel_rcnn_anchorhead.yaml) | 3 |85.2 / 72.7 | 58.8 / 50.3 | [model](https://drive.google.com/file/d/1mU3BNQKkIYId35tQA1XaI-ztF5COLO9c/view?usp=sharing) | 
+
+
+### More qualitative results 
+Take a look at more of our visualizations for [MS3D++ qualitative](https://www.youtube.com/watch?v=FhTpUOpm7d8) and [MS3D qualitative](https://www.youtube.com/watch?v=H7SvDm3iBgQ).
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+MS3D is released under the [Apache 2.0 license](LICENSE).
+
+
+## Citation
+If you find this project useful in your research, please give us a star and consider citing:
+
+```
+@article{tsai2023ms3d++,
+ title={MS3D++: Ensemble of Experts for Multi-Source Unsupervised Domain Adaptation in 3D Object Detection},
+ author={Tsai, Darren and Berrio, Julie Stephany and Shan, Mao and Nebot, Eduardo and Worrall, Stewart},
+ journal={arXiv preprint arXiv:2308.05988},
+ year={2023}
+}
+@article{tsai2023ms3d,
+ title={MS3D: Leveraging Multiple Detectors for Unsupervised Domain Adaptation in 3D Object Detection},
+ author={Tsai, Darren and Berrio, Julie Stephany and Shan, Mao and Nebot, Eduardo and Worrall, Stewart},
+ journal={arXiv preprint arXiv:2304.02431},
+ year={2023}
+}
+```

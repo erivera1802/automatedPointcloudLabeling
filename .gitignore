@@ -1,0 +1,40 @@
+**__pycache__**
+**build**
+**egg-info**
+**dist**
+data/
+*.pyc
+venv/
+*.idea/
+*.so
+*.pth
+*.pkl
+*.pcd
+*.json
+*.zip
+*.bin
+output
+version.py
+*.pdf
+*.vscode
+.ipynb_checkpoints
+# docker
+checkpoints
+model_zoo
+*.out
+*Trash*
+*.gif
+*.png
+*.jpg
+*.tar.xz
+*.txt
+demo_data
+*.csv
+ps_labels
+data_temp
+demo_kittti
+# autolabel_edgar_demo
+# autolabel_kitti_demo
+# autolabel_kitti_images
+# autolabel_target_waymo_round1
+autolabel_*

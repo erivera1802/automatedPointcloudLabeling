@@ -1,0 +1,134 @@
+DATASET: 'Argo2Dataset'
+DATA_PATH: '/MS3D/data_temp/argo'
+
+#POINT_CLOUD_RANGE: [-200, -200, -20, 200, 200, 20]
+POINT_CLOUD_RANGE: [-75.2, -75.2, -2, 75.2, 75.2, 4] 
+SHIFT_COOR: [0.0,0.0,0.0]
+
+MAX_SWEEPS: 4
+
+DATA_SPLIT: {
+    'train': train,
+    'test': val,
+}
+
+SAMPLED_INTERVAL: {
+    'train': 500,
+    'test': 500,
+}        
+
+INFO_PATH: {
+    'train': [argo2_infos_train.pkl],
+    'test': [argo2_infos_val.pkl],
+}
+
+GET_ITEM_LIST: ["points"]
+
+# CLASS_NAMES: ['Car', 'Pedestrian', 'Cyclist']
+# CLASS_MAPPING: {'Car': 'Car',
+#                 'car': 'Car',                                
+#                 'truck': 'Car',
+#                 'Truck': 'Car',
+#                 'bus': 'Car',
+#                 'Veh': 'Car',
+#                 'Regular_vehicle': 'Car',
+#                 'Vehicle': 'Car',
+#                 'Wheelchair': 'Cyclist',
+#                 'bicycle': 'Cyclist',
+#                 'motorcycle': 'Cyclist',
+#                 'Bicyclist': 'Cyclist',
+#                 'Cyclist': 'Cyclist',
+#                 'pedestrian': 'Pedestrian',
+#                 'Pedestrian': 'Pedestrian'}
+
+# CLASS_NAMES: ['Regular_vehicle', 'Pedestrian', 'Bicyclist', 'Motorcyclist', 'Wheeled_rider', 'Bollard', 'Construction_cone', 'Sign', 'Construction_barrel', 'Stop_sign', 'Mobile_pedestrian_crossing_sign', 'Large_vehicle', 'Bus', 'Box_truck', 'Truck', 'Vehicular_trailer', 'Truck_cab', 'School_bus', 'Articulated_bus', 'Message_board_trailer', 'Bicycle', 'Motorcycle', 'Wheeled_device', 'Wheelchair', 'Stroller', 'Dog']
+
+# CLASS_MAPPING: {'Car': 'Vehicle',
+#                 'car': 'Vehicle',                                
+#                 'truck': 'Vehicle',
+#                 'bus': 'Vehicle',
+#                 'Vehicle': 'Vehicle',
+#                 'Regular_vehicle': 'Vehicle',
+#                 'Bus': 'Vehicle',
+#                 'Box_truck': 'Vehicle',
+#                 'Large_vehicle': 'Vehicle',
+#                 'Truck': 'Vehicle',
+#                 'School_bus': 'Vehicle',
+#                 'Articulated_bus': 'Vehicle',
+#                 'Message_board_trailer': 'Vehicle',
+#                 'Truck_cab': 'Vehicle',
+#                 'Vehicular_trailer': 'Vehicle',
+#                 'bicycle': 'Cyclist',
+#                 'Bicyclist': 'Cyclist',
+#                 'motorcycle': 'Cyclist',
+#                 'Cyclist': 'Cyclist',
+#                 'Wheeled_rider': 'Cyclist',
+#                 'Wheeled_device': 'Cyclist',
+#                 'Wheelchair': 'Unknown',
+#                 'Motorcyclist': 'Cyclist',
+#                 'Motorcycle': 'Cyclist',
+#                 'Bicycle': 'Cyclist',
+#                 'pedestrian': 'Pedestrian',
+#                 'Pedestrian': 'Pedestrian',
+#                 'Bollard': 'Unknown',
+#                 'Construction_cone': 'Unknown',
+#                 'Sign': 'Unknown',
+#                 'Stroller': 'Unknown',
+#                 'Construction_barrel': 'Unknown',
+#                 'Stop_sign': 'Unknown',
+#                 'Mobile_pedestrian_crossing_sign': 'Unknown',
+#                 'Dog': 'Unknown'}
+
+DATA_AUGMENTOR:
+    DISABLE_AUG_LIST: ['placeholder']
+    AUG_CONFIG_LIST:
+
+        - NAME: random_world_flip
+          ALONG_AXIS_LIST: ['x']
+
+        - NAME: random_world_rotation
+          WORLD_ROT_ANGLE: [-0.78539816, 0.78539816]
+
+        - NAME: random_world_scaling
+          WORLD_SCALE_RANGE: [0.95, 1.05]
+
+
+#WORKS WITH WAYMO MODEL
+# POINT_FEATURE_ENCODING: {
+#     encoding_type: absolute_coordinates_encoding,
+#     used_feature_list: ['x', 'y', 'z', 'intensity'],
+#     src_feature_list: ['x', 'y', 'z', 'intensity'],
+# }
+
+# WORKS WITH NUSCENES LYFT:
+POINT_FEATURE_ENCODING: {
+    encoding_type: absolute_coordinates_encoding,
+    used_feature_list: ['x', 'y', 'z','timestamp'],
+    src_feature_list: ['x', 'y', 'z','timestamp'],
+}
+
+
+DATA_PROCESSOR:
+    - NAME: mask_points_and_boxes_outside_range
+      REMOVE_OUTSIDE_BOXES: True
+
+    - NAME: shuffle_points
+      SHUFFLE_ENABLED: {
+        'train': True,
+        'test': False
+      }
+
+    - NAME: transform_points_to_voxels
+      VOXEL_SIZE: [0.1, 0.1, 0.2]
+      MAX_POINTS_PER_VOXEL: 5
+      MAX_NUMBER_OF_VOXELS: {
+        'train': 160000,
+        'test': 400000
+      }
+    # - NAME: transform_points_to_voxels
+    #   VOXEL_SIZE: [0.05, 0.05, 0.1]
+    #   MAX_POINTS_PER_VOXEL: 5
+    #   MAX_NUMBER_OF_VOXELS: {
+    #     'train': 16000,
+    #     'test': 40000
+    #   }     

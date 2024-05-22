@@ -4,11 +4,11 @@
 # DATA_PATH="/mnt/big-data/darren/data"
 # CODE_PATH="/mnt/big-data/darren/code/MS3D"
 
-DATA_PATH="/home/datasets/"
-BEGUM_PATH="/home/altb/datasets/argo2"
-# WAYMO_DATA_PATH="/home/altb/datasets/waymo_processed"
-#CODE_PATH="/home/ubuntu/BegumGorkem/MS3D"
-# CODE_PATH="/home/altb/idp-ms3d"
+KITTI_DATA_PATH="/home/datasets/KITTI_3D_Object_Detection"
+nuscenes_DATA_PATH="/home/datasets/nuscenes"
+Waymo_DATA_PATH="/home/datasets/Waymo"
+garching_DATA_PATH="/home/datasets/garching"
+argo_PATH="/home/altb/datasets/argo2"
 
 CODE_PATH="/home/altb/automatedpclabelling"
 #CODE_PATH='/home/altb/OpenPCDet'
@@ -19,8 +19,11 @@ ENVS="  --env=NVIDIA_VISIBLE_DEVICES=$GPU_ID
         --env=CUDA_VISIBLE_DEVICES=$GPU_ID
         --env=NVIDIA_DRIVER_CAPABILITIES=all"
 
-VOLUMES="       --volume=$DATA_PATH:/MS3D/data_temp
-                --volume=$BEGUM_PATH:/MS3D/data_temp/argo"
+VOLUMES="       --volume=$KITTI_DATA_PATH:/MS3D/data_temp/KITTI_3D_Object_Detection
+                --volume=$nuscenes_DATA_PATH:/MS3D/data_temp/nuscenes
+                --volume=$Waymo_DATA_PATH:/MS3D/data_temp/Waymo
+                --volume=$garching_DATA_PATH:/MS3D/data_temp/garching
+                --volume=$argo_PATH:/MS3D/data_temp/argo"
                 # --volume=$COPY_PATH:/pclabelling"
                 # --volume=$WAYMO_DATA_PATH:/MS3D/data_temp/waymo
         

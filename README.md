@@ -1,5 +1,10 @@
-# MS3D and MS3D++
-This is the official code release for
+<!-- # MS3D and MS3D++ -->
+
+Implementation on top of the MS3D github repo
+
+TO-DO
+
+<!-- This is the official code release for
 - **MS3D**: Leveraging Multiple Detectors for Unsupervised Domain Adaptation in 3D Object Detection [[paper](https://arxiv.org/abs/2304.02431)]
 - **MS3D++**: Ensemble of Experts for Multi-Source Unsupervised Domain Adaptation in 3D Object Detection [[paper](https://arxiv.org/abs/2308.05988)] [[presentation](https://youtu.be/gjOgirSks8I?si=i0SMDmqcOrIB2Y49)]
 
@@ -159,4 +164,4 @@ If you find this project useful in your research, please give us a star and cons
  journal={arXiv preprint arXiv:2304.02431},
  year={2023}
 }
-```
+``` -->

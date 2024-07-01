@@ -1,10 +1,21 @@
 import subprocess
 import os
 import shutil
+import argparse
 
 ## MUST BE EXECUTED INSIDE MS3D DOCKER !!!
+## Generate lidar odom sh, info pkls, imagesets and train.txt 
 
-save_dir = "/MS3D/data/edgar"
+def parse_config():
+    parser = argparse.ArgumentParser(description='arg parser')
+    parser.add_argument('--save_dir', type=str)
+    args = parser.parse_args()
+
+    return args
+
+target_cfg = parse_config()
+save_dir = target_cfg.save_dir
+
 
 for rosbag_folder in os.listdir(save_dir):
     folder_path = save_dir+f"/{rosbag_folder}"
@@ -17,7 +28,9 @@ for rosbag_folder in os.listdir(save_dir):
     os.chdir("/MS3D")
     python_executable = "python3" 
     module_path = "pcdet.datasets.custom.custom_dataset"
-    rosbag_folder_path = f"/MS3D/data/edgar/{rosbag_folder}"
+    rosbag_folder_path = f"{save_dir}/{rosbag_folder}"
+    # print("ROSBcAG FOLDER PATH", rosbag_folder_path)
+    # import pdb;pdb.set_trace()
     command = [python_executable, "-m", module_path, "create_infos", rosbag_folder_path]
 
     subprocess.run(command)

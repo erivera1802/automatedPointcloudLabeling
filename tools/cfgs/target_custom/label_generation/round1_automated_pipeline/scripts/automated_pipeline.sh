@@ -12,10 +12,10 @@ bash ${CUSTOM_PATH}/scripts/pretrained/lyft_pt_dets_pv_c.sh
 bash ${CUSTOM_PATH}/scripts/pretrained/lyft_pt_dets_vx_a.sh
 bash ${CUSTOM_PATH}/scripts/pretrained/lyft_pt_dets_vx_c.sh
 
-bash ${CUSTOM_PATH}/scripts/pretrained/nusc_pt_dets_pv_a.sh
-bash ${CUSTOM_PATH}/scripts/pretrained/nusc_pt_dets_pv_c.sh
-bash ${CUSTOM_PATH}/scripts/pretrained/nusc_pt_dets_vx_a.sh
-bash ${CUSTOM_PATH}/scripts/pretrained/nusc_pt_dets_vx_c.sh
+# bash ${CUSTOM_PATH}/scripts/pretrained/nusc_pt_dets_pv_a.sh
+# bash ${CUSTOM_PATH}/scripts/pretrained/nusc_pt_dets_pv_c.sh
+# bash ${CUSTOM_PATH}/scripts/pretrained/nusc_pt_dets_vx_a.sh
+# bash ${CUSTOM_PATH}/scripts/pretrained/nusc_pt_dets_vx_c.sh
 
 bash ${CUSTOM_PATH}/scripts/pretrained/waymo_pt_dets_pv_a.sh
 bash ${CUSTOM_PATH}/scripts/pretrained/waymo_pt_dets_pv_c.sh

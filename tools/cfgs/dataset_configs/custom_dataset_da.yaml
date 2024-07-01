@@ -1,5 +1,5 @@
 DATASET: CustomDataset
-DATA_PATH: /MS3D/data/edgar/2024_04_23_bakery_sensorsplussensing_000
+DATA_PATH: /MS3D/data/edgar/TO_PSEUDO_LABEL/2024_06_11_garching_labelinggarching_000
 SHIFT_COOR:
 - 0.0
 - 0.0

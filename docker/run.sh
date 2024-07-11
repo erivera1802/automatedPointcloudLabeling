@@ -10,6 +10,8 @@ Waymo_DATA_PATH="/home/datasets/Waymo"
 garching_DATA_PATH="/home/datasets/garching"
 argo_PATH="/home/altb/datasets/argo2"
 nuscenes_format_garching="/home/altb/pointclouds/nuscenes_format_garching"
+pcd_path_before_formatting="/home/altb/pointclouds_final"
+
 
 CODE_PATH="/home/altb/automatedpclabelling"
 #CODE_PATH='/home/altb/OpenPCDet'
@@ -26,6 +28,8 @@ VOLUMES="       --volume=$KITTI_DATA_PATH:/MS3D/data_temp/KITTI_3D_Object_Detect
                 --volume=$garching_DATA_PATH:/MS3D/data_temp/garching
                 --volume=$argo_PATH:/MS3D/data_temp/argo
                 --volume=$nuscenes_format_garching:/MS3D/data_temp/nuscenes_format_garching
+                --volume $pcd_path_before_formatting:/MS3D/pointclouds_final
+
                 "
                 # --volume=$COPY_PATH:/pclabelling"
                 # --volume=$WAYMO_DATA_PATH:/MS3D/data_temp/waymo

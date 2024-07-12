@@ -8,7 +8,7 @@ import pickle
 # # waymo_processed_data_v0_5_0
 
 #p_f_3 = "/home/ubuntu/BegumGorkem/MS3D/tools/cfgs/target_waymo/label_generation/round1/ps_labels/initial_pseudo_labels.pkl"
-p_f_3 =   "/MS3D/tools/cfgs/target_custom/label_generation/round1_automated_pipeline/ps_labels/2024_04_11_bakery_weeklytest_004.pkl"
+p_f_3 =   "/MS3D/tools/cfgs/target_custom/label_generation/round1_automated_pipeline/ps_labels/2024_06_27_schwabing_daily_001.pkl"
 
 # p_f_3 = '/home/ubuntu/BegumGorkem/MS3D/output/model_zoo/lyft_pretrained/cfgs/lyft_uda_voxel_rcnn_centerhead_3xyzt_allcls/default/eval/epoch_3/val/lyft3xyzt_custom4xyzt_rwf_rwr/result.pkl'
 

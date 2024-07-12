@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# DIR="/MS3D/data/edgar"
 DIR="/MS3D/data/edgar/TO_PSEUDO_LABEL"
-#DIR="/MS3D/data/edgar_11_06"
 # DIR="/MS3D/data/manual_annotation_edgar"
 
 # CONVERT RAW ROSBAGS INTO PSEUDOLABEL FORMAT

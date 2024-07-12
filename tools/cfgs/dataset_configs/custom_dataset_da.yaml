@@ -1,5 +1,5 @@
 DATASET: CustomDataset
-DATA_PATH: /MS3D/data/edgar/TO_PSEUDO_LABEL/2024_06_11_garching_labelinggarching_000
+DATA_PATH: /MS3D/data/edgar/TO_PSEUDO_LABEL/2024_06_27_schwabing_daily_001
 SHIFT_COOR:
 - 0.0
 - 0.0

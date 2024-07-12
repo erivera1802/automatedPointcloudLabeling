@@ -17,7 +17,7 @@ def check_points_labels_files_same():
         #import pdb;pdb.set_trace()
         if file_root_point  != file_root_label:
             print( "NOT SAME FILE NAME FOR INDEX !!", i , file_root_point, file_root_label)
-            #break
+            
 
 
 def save_points_labels_in_openpcdet_format():
@@ -40,6 +40,8 @@ def save_points_labels_in_openpcdet_format():
                  save_path_npy = f"/OpenPCDet/data/custom/points/{pcd_file_root}.npy"
                  os.makedirs(f"/OpenPCDet/data/custom/points",exist_ok=True)
                  np.save(save_path_npy, np_points)
+
+    print("----save_points_labels_in_openpcdet_format----- done -----")
 
 
 def convert_labels(ps_labels_path,save_dir):
@@ -80,6 +82,8 @@ def convert_labels(ps_labels_path,save_dir):
                 line = f"{center_x} {center_y} {center_z} {length} {width} {height} {rotation_angle} {class_name} """"\n"""""
                 file.write(line)
 
+    print("----convert_labels----- done -----")
+
 
 def convert_pcd2npy(pcd_file):
     pcd = o3d.io.read_point_cloud(pcd_file)
@@ -109,6 +113,8 @@ def find_empty_files():
 
     np.save('empty_list_array.npy', empty_files)
 
+    print("----find_empty_files----- done ----- saved as empty_list_array.npy ")
+
     return empty_files
 
 
@@ -123,7 +129,6 @@ def find_rosbag_of_empty_frames(empty_files):
 
         for rosbag_folder in os.listdir(base_path):
 
-            
             for sequence in os.listdir(base_path+ "/" +rosbag_folder+"/sequences"):
   
                 for pcd_file in os.listdir(base_path+ "/" +rosbag_folder+"/sequences" + "/" + sequence+"/lidar"):
@@ -146,9 +151,9 @@ def delete_empty_files():
 
 if __name__ == '__main__':
 
-    # ms3d_data_path = '/MS3D/data/edgar/PSEUDO_LABELED'
-    ms3d_data_path = '/MS3D/data/edgar/TO_PSEUDO_LABEL'
-    openpcdet_save_dir = '/home/altb/OpenPCDet/data'
+    ms3d_data_path = '/MS3D/data/edgar/PSEUDO_LABELED'
+    # ms3d_data_path = '/MS3D/data/edgar/TO_PSEUDO_LABEL'
+    openpcdet_save_dir = '/OpenPCDet/data'
 
     # SAVE POINTS AND LABELS IN OPENPCDET FORMAT
     save_points_labels_in_openpcdet_format()

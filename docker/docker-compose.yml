@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  ms3d:
+    #user: tum
+    build:
+      context: .
+      #args:
+      #  - UID=${UID}
+      #  - GID=${GID}
+    container_name: ms3d
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - NVIDIA_VISIBLE_DEVICES=$GPU_ID
+      - CUDA_VISIBLE_DEVICES=$GPU_ID
+      #- NVIDIA_DRIVER_CAPABILITIES=all"
+    runtime: nvidia
+    # # deploy:
+    # #   resources:
+    # #     reservations:
+    # #       devices:
+    # #         - driver: nvidia
+    # #           count: $GPU_ID
+    volumes:
+      - /tmp/.X11-unix/:/tmp/.X11-unix/
+      - /dev/shm:/dev/shm
+      - $KITTI_DATA_PATH:/MS3D/data_temp/KITTI_3D_Object_Detection
+      - $nuscenes_DATA_PATH:/MS3D/data_temp/nuscenes
+      - $Waymo_DATA_PATH:/MS3D/data_temp/Waymo
+      - $garching_DATA_PATH:/MS3D/data_temp/garching
+      - $argo_PATH:/MS3D/data_temp/argo
+      - $nuscenes_format_garching:/MS3D/data_temp/nuscenes_format_garching
+      - $pcd_path_before_formatting:/MS3D/pointclouds_final
+      - $CODE_PATH:/MS3D
+    ipc: host
+    shm_size: '30G'
+    working_dir: /MS3D
+    stdin_open: true
+    tty: true
+    restart: "no"
+    privileged: true
+    command: tail -F /dev/null

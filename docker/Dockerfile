@@ -68,4 +68,5 @@ RUN pip install opencv-python-headless
 RUN apt-get install -y libgl1-mesa-dev
 RUN pip install av2==0.2.0
 RUN pip install kornia==0.5.8
+RUN pip install torch-scatter==2.1.2
 RUN pip install kiss-icp[all]

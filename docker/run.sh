@@ -10,7 +10,7 @@ Waymo_DATA_PATH="/home/datasets/Waymo"
 garching_DATA_PATH="/home/datasets/garching"
 argo_PATH="/home/altb/datasets/argo2"
 nuscenes_format_garching="/home/altb/pointclouds/nuscenes_format_garching"
-pcd_path_before_formatting="/home/altb/pointclouds_final"
+pcd_path_before_formatting="/home/ge48vus/esteban/pseudolabeling/rosbags/pcds"
 
 
 CODE_PATH="/home/altb/automatedpclabelling"
@@ -39,7 +39,7 @@ VISUAL="        --env=DISPLAY
                 --env=QT_X11_NO_MITSHM=1
                 --volume=/tmp/.X11-unix:/tmp/.X11-unix
         "
-xhost +local:docker
+#xhost +local:docker
 
 echo "Running the docker image [GPUS: ${GPU_ID}]"
 #docker_image="darrenjkt/openpcdet:v0.6.0"
@@ -47,7 +47,7 @@ echo "Running the docker image [GPUS: ${GPU_ID}]"
 docker_image="begumaltunbas/openpcdet:cuda11_ms3d_v2"
 
 # Start docker image
-docker  run --name ms3d-container -d -it --rm \
+docker  run --name ms3d-container-esteban -d -it --rm \
 $VOLUMES \
 $ENVS \
 $VISUAL \

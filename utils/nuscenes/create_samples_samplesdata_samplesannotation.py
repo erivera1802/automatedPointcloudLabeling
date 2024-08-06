@@ -9,7 +9,8 @@ from scipy.spatial.transform import Rotation
 import uuid
 import json
 
-ANNOTATIONS_PATH = "../muenchen/pcd_annotations/2024_07_22_muenchen_labeling_000.pkl"
+#ANNOTATIONS_PATH = "../muenchen/pcd_annotations/2024_07_22_muenchen_labeling_000.pkl"
+ANNOTATIONS_PATH = "../muenchen/pcd_annotations/"
 LABEL_DICT = {0:"vehicle.car", 1: "human.pedestrian.adult",2:"vehicle.bicycle"}
 # Function to create a unique token
 def create_token():
@@ -181,7 +182,7 @@ def get_sensor_modality(dataset_path, dataset_version, channel="LIDAR_TOP"):
         if sensor['channel'] == channel:
             return sensor['modality']
     
-    print("f{channel} channel not found in sensor.json")
+    print(f"{channel} channel not found in sensor.json")
     return None
 
 # Function to get the token of channel
@@ -209,13 +210,24 @@ def read_annotation(pickle_path):
         This pickle file must be in MS3D generated format (consists of the rosbag predictions with all frame_ids)
         confidence_threshold (float): To visualize objects which are above a certain threshold.
     """
-    # Check if the PCD folder exists
+    # Check if the PCD file exists
     if not os.path.exists(pickle_path):
         print(f"Folder not found: {pickle_path}")
         return     
     result = pd.read_pickle(pickle_path)
     return result
 
+def read_multiple_annotations(pickles_path):
+    # Check if the PCD file exists
+    if not os.path.exists(pickles_path):
+        print(f"Folder not found: {pickles_path}")
+        return
+    annotations = {}     
+    for filename in os.listdir(pickles_path):
+        pickle_filepath = os.path.join(pickles_path,filename)
+        annotation = read_annotation(pickle_filepath)
+        annotations.update(annotation)
+    return annotations
 def get_pointcloud_id(pcd_path):
     file_name = pcd_path.split('/')[-1]
     if '_' in file_name:
@@ -260,7 +272,7 @@ def process_sample_annotations(dataset_path, dataset_version, sample_annotation,
     return sample_annotation_data
 
 # Function to create sample.json and sample_data.json and sample_annotation.json
-def create_sample_files(dataset_path, dataset_version):
+def create_sample_files(dataset_path, dataset_version, annotations_path):
     
     scene_file_path = os.path.join(dataset_path, f'{dataset_version}/scene.json')
     pcd_folder_path = os.path.join(dataset_path, 'samples/LIDAR_TOP')
@@ -268,9 +280,14 @@ def create_sample_files(dataset_path, dataset_version):
     sample_data_file_path = os.path.join(dataset_path, f'{dataset_version}/sample_data.json')
     sample_annotation_file_path = os.path.join(dataset_path, f'{dataset_version}/sample_annotation.json')
     lidar_name = "LIDAR_TOP"
-    sensor_token = get_sensor_token(dataset_path=dataset_path, dataset_version=dataset_version, channel=lidar_name)
-    sensor_modality = get_sensor_modality(dataset_path=dataset_path,dataset_version=dataset_version, channel=lidar_name)
-    calibrated_sensor_token= get_calibrated_sensor_token(dataset_path=dataset_path, dataset_version=dataset_version, sensor_token=sensor_token)
+    camera_name = "CAM_FRONT"
+    lidar_sensor_token = get_sensor_token(dataset_path=dataset_path, dataset_version=dataset_version, channel=lidar_name)
+    lidar_sensor_modality = get_sensor_modality(dataset_path=dataset_path,dataset_version=dataset_version, channel=lidar_name)
+    lidar_calibrated_sensor_token= get_calibrated_sensor_token(dataset_path=dataset_path, dataset_version=dataset_version, sensor_token=lidar_sensor_token)
+
+    camera_sensor_token = get_sensor_token(dataset_path=dataset_path, dataset_version=dataset_version, channel=camera_name)
+    camera_sensor_modality = get_sensor_modality(dataset_path=dataset_path,dataset_version=dataset_version, channel=camera_name)
+    camera_calibrated_sensor_token= get_calibrated_sensor_token(dataset_path=dataset_path, dataset_version=dataset_version, sensor_token=camera_sensor_token)
     # Check if the scene.json file exists
     if not os.path.exists(scene_file_path):
         print(f"File not found: {scene_file_path}")
@@ -284,7 +301,8 @@ def create_sample_files(dataset_path, dataset_version):
     # Read the scene.json file
     with open(scene_file_path, 'r') as f:
         scene_data = json.load(f)
-    annotation_file = read_annotation(pickle_path=ANNOTATIONS_PATH)
+
+    annotation_file = read_multiple_annotations(pickles_path=annotations_path)
 
     # List all PCD files in the folder
     pcd_files = sorted([f for f in os.listdir(pcd_folder_path) if f.endswith('.pcd.bin')])
@@ -294,11 +312,13 @@ def create_sample_files(dataset_path, dataset_version):
     sample_annotation_entries = []
     prev_sample_token = ""
     prev_sample_data_token = ""
+    prev_sample_data_camera_token = ""
     
 
     for i, pcd_file in enumerate(pcd_files):
         sample_token = create_token()
         sample_data_token = create_token()
+        sample_data_camera_token = create_token()
         scene_token = scene_data[0]['token'] 
         pcd_name = get_pointcloud_id(pcd_path=pcd_file)
         # Create sample_data entry
@@ -306,7 +326,7 @@ def create_sample_files(dataset_path, dataset_version):
             "token": sample_data_token,
             "sample_token": sample_token,
             "ego_pose_token": read_ego_pose_json(dataset_path, dataset_version)[0]["token"],  # Replace with actual ego pose token if available
-            "calibrated_sensor_token": calibrated_sensor_token,  # Replace with actual calibrated sensor token
+            "calibrated_sensor_token": lidar_calibrated_sensor_token,  # Replace with actual calibrated sensor token
             "filename": f"samples/{lidar_name}/{pcd_file}",
             "fileformat": "PCD",
             "width": 0,
@@ -315,11 +335,30 @@ def create_sample_files(dataset_path, dataset_version):
             "is_key_frame": True,
             "next": "",
             "prev": prev_sample_data_token,
-            "sensor_modality": sensor_modality,
+            "sensor_modality": lidar_sensor_modality,
             "channel": lidar_name
         }
 
         sample_data_entries.append(sample_data_entry)
+
+        ## Adding camera
+        sample_data_camera_entry = {
+            "token": sample_data_camera_token,
+            "sample_token": sample_token,
+            "ego_pose_token": read_ego_pose_json(dataset_path, dataset_version)[0]["token"],  # Replace with actual ego pose token if available
+            "calibrated_sensor_token": camera_calibrated_sensor_token,  # Replace with actual calibrated sensor token
+            "filename": f"samples/{camera_name}/traffic.jpg", ## TODO HARDCODED
+            "fileformat": "JPG",
+            "width": 1280,
+            "height": 1024,
+            "timestamp": int(pcd_file.split("_")[0]),  # Increment timestamp for simplicity
+            "is_key_frame": True,
+            "next": "",
+            "prev": prev_sample_data_camera_token,
+            "sensor_modality": camera_sensor_modality,
+            "channel": camera_name
+        }
+        sample_data_entries.append(sample_data_camera_entry)
 
         # Create sample entry
         sample_entry = {
@@ -345,6 +384,7 @@ def create_sample_files(dataset_path, dataset_version):
             sample_data_entries[-2]["next"] = sample_data_token
         prev_sample_token = sample_token
         prev_sample_data_token = sample_data_token
+        prev_sample_data_camera_token = sample_data_camera_token
 
     # Write sample_data.json
     with open(sample_data_file_path, 'w') as f:
@@ -372,6 +412,8 @@ def main():
     parser.add_argument('--dataset_path', type=str, help="The input argument to be processed")
     # Add an argument
     parser.add_argument('--dataset_version', type=str, help="The input argument to be processed")
+    # Add an argument
+    parser.add_argument('--annotations_path', type=str, help="Where the pkls are")
 
     # Parse the arguments
     args = parser.parse_args()
@@ -380,8 +422,9 @@ def main():
     # Write visibility data to visibility.json file
     dataset_path = args.dataset_path
     dataset_version = args.dataset_version
+    annotations_path = args.annotations_path
     
-    create_sample_files(dataset_path, dataset_version)
+    create_sample_files(dataset_path, dataset_version, annotations_path)
 
 if __name__ == "__main__":
     main()

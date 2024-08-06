@@ -31,8 +31,9 @@ def read_sample_json(dataset_path, dataset_version):
     return sample_data
 
 def update_scene(scenes, samples):
-    scenes[0]["first_sample_token"]=samples[0]["token"]
-    scenes[0]["last_sample_token"]=samples[-1]["token"]
+    for i,scene in enumerate(scenes):
+        scene["first_sample_token"]=samples[i]["token"]
+        scene["last_sample_token"]=samples[i]["token"]
     
     return scenes
 

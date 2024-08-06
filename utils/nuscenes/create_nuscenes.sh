@@ -29,6 +29,6 @@ python3 create_map.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VE
 python3 create_ego_pose.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 python3 create_calibrated_sensor.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 python3 create_scene.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
-python3 create_samples_samplesdata_samplesannotation.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
-#python3 update_firstlast.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_samples_samplesdata_samplesannotation.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION --annotations_path $ANNOTATIONS_PATH
+python3 update_firstlast.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 

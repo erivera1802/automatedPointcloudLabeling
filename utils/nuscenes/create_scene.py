@@ -31,6 +31,14 @@ def create_scene(dataset_path, dataset_version):
             "first_sample_token": create_token(),  # Replace with actual first sample token
             "last_sample_token": create_token(),  # Replace with actual last sample token
             "timestamp": 1532402928000000  # Replace with actual timestamp
+        },
+        {
+            "name": "scene-0002",
+            "description": "Second example scene.",
+            "nbr_samples": 5,
+            "first_sample_token": create_token(),  # Replace with actual first sample token
+            "last_sample_token": create_token(),  # Replace with actual last sample token
+            "timestamp": 1532402928000001  # Replace with actual timestamp
         }
     ]
 
@@ -41,7 +49,7 @@ def create_scene(dataset_path, dataset_version):
             "token": create_token(),
             "name": scene["name"],
             "description": scene["description"],
-            "log_token": log_data[i]["token"],  # Assuming log_data index matches scenes index
+            "log_token": log_data[0]["token"],  # Assuming log_data index matches scenes index
             "nbr_samples": scene["nbr_samples"],
             "first_sample_token": scene["first_sample_token"],
             "last_sample_token": scene["last_sample_token"],

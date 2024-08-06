@@ -1,15 +1,16 @@
 import json
 import os
 import uuid
+import argparse
 
 # Function to create a unique token
 def create_token():
     return str(uuid.uuid4())
 
 # Function to read sensor.json and create calibrated_sensor.json
-def create_calibrated_sensor_json(dataset_root):
-    sensor_file_path = os.path.join(dataset_root, 'v1.0-mini/sensor.json')
-    calibrated_sensor_file_path = os.path.join(dataset_root, 'v1.0-mini/calibrated_sensor.json')
+def create_calibrated_sensor(dataset_path, dataset_version):
+    sensor_file_path = os.path.join(dataset_path, f'{dataset_version}/sensor.json')
+    calibrated_sensor_file_path = os.path.join(dataset_path, f'{dataset_version}/calibrated_sensor.json')
 
     # Check if the sensor.json file exists
     if not os.path.exists(sensor_file_path):
@@ -61,9 +62,23 @@ def create_calibrated_sensor_json(dataset_root):
     print(f"calibrated_sensor.json created successfully at {calibrated_sensor_file_path}")
 
 def main():
-    # Replace 'path_to_dataset_root' with the actual path to your dataset root directory
-    dataset_root = '../muenchen'
-    create_calibrated_sensor_json(dataset_root)
+    # Create the parser
+    parser = argparse.ArgumentParser(description="A simple script to read a command-line argument.")
+
+    # Add an argument
+    parser.add_argument('--dataset_path', type=str, help="The input argument to be processed")
+    # Add an argument
+    parser.add_argument('--dataset_version', type=str, help="The input argument to be processed")
+
+    # Parse the arguments
+    args = parser.parse_args()
+
+    
+    # Write visibility data to visibility.json file
+    dataset_path = args.dataset_path
+    dataset_version = args.dataset_version
+    
+    create_calibrated_sensor(dataset_path, dataset_version)
 
 if __name__ == "__main__":
     main()

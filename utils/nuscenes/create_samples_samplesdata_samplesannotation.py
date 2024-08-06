@@ -16,8 +16,8 @@ def create_token():
     return str(uuid.uuid4())
 
 # Function to read and print all unique sensor names in samples
-def read_sensor_names(dataset_root):
-    sample_data_file_path = os.path.join(dataset_root, 'v1.0-mini/sample_data.json')
+def read_sensor_names(dataset_path, dataset_version):
+    sample_data_file_path = os.path.join(dataset_path, f'{dataset_version}/sample_data.json')
     
     # Check if the file exists
     if not os.path.exists(sample_data_file_path):
@@ -35,8 +35,8 @@ def read_sensor_names(dataset_root):
     
     return sensor_names
 
-def read_calibrated_sensor_json(dataset_root):
-    calibrated_sensor_file_path = os.path.join(dataset_root, 'v1.0-mini/calibrated_sensor.json')
+def read_calibrated_sensor_json(dataset_path, dataset_version):
+    calibrated_sensor_file_path = os.path.join(dataset_path, f'{dataset_version}/calibrated_sensor.json')
     
     # Check if the file exists
     if not os.path.exists(calibrated_sensor_file_path):
@@ -52,8 +52,8 @@ def read_calibrated_sensor_json(dataset_root):
 
 
 # Function to read and print sensor.json
-def read_sensor_json(dataset_root):
-    sensor_file_path = os.path.join(dataset_root, 'v1.0-mini/sensor.json')
+def read_sensor_json(dataset_path, dataset_version):
+    sensor_file_path = os.path.join(dataset_path, f'{dataset_version}/sensor.json')
     
     # Check if the file exists
     if not os.path.exists(sensor_file_path):
@@ -68,8 +68,8 @@ def read_sensor_json(dataset_root):
     return sensor_data
 
 
-def read_ego_pose_json(dataset_root):
-    ego_pose_file_path = os.path.join(dataset_root, 'v1.0-mini/ego_pose.json')
+def read_ego_pose_json(dataset_path, dataset_version):
+    ego_pose_file_path = os.path.join(dataset_path, f'{dataset_version}/ego_pose.json')
     
     # Check if the file exists
     if not os.path.exists(ego_pose_file_path):
@@ -83,8 +83,8 @@ def read_ego_pose_json(dataset_root):
     # Print the contents in a human-readable format
     return ego_pose_data
 
-def read_attribute_json(dataset_root):
-    attribute_file_path = os.path.join(dataset_root, 'v1.0-mini/attribute.json')
+def read_attribute_json(dataset_path, dataset_version):
+    attribute_file_path = os.path.join(dataset_path, f'{dataset_version}/attribute.json')
     
     # Check if the file exists
     if not os.path.exists(attribute_file_path):
@@ -97,8 +97,8 @@ def read_attribute_json(dataset_root):
     return attribute_data
 
 # Function to read and print instance.json
-def read_instance_json(dataset_root):
-    instance_file_path = os.path.join(dataset_root, 'v1.0-mini/instance.json')
+def read_instance_json(dataset_path, dataset_version):
+    instance_file_path = os.path.join(dataset_path, f'{dataset_version}/instance.json')
     
     # Check if the file exists
     if not os.path.exists(instance_file_path):
@@ -110,7 +110,7 @@ def read_instance_json(dataset_root):
         instance_data = json.load(f)
     return instance_data
 
-#read_instance_json(dataset_root)[0]["token"]
+#read_instance_json(dataset_path)[0]["token"]
 def get_instance_token_from_category(instance_data,category_token):
     for entry in instance_data:
         if entry['category_token'] == category_token:
@@ -118,14 +118,14 @@ def get_instance_token_from_category(instance_data,category_token):
     
     print(f"No entry found with category token: {category_token}")
     return None
-def get_instance_token(dataset_root, label):
+def get_instance_token(dataset_path,dataset_version, label):
     label_name = LABEL_DICT[label]
-    category_token = get_category_token(dataset_root=dataset_root, category_name=label_name)
-    instance_data = read_instance_json(dataset_root=dataset_root)
+    category_token = get_category_token(dataset_path=dataset_path, dataset_version=dataset_version, category_name=label_name)
+    instance_data = read_instance_json(dataset_path=dataset_path, dataset_version=dataset_version)
     instance_token = get_instance_token_from_category(instance_data, category_token)
     return instance_token
-def get_category_token(dataset_root, category_name):
-    category_file_path = os.path.join(dataset_root, 'v1.0-mini/category.json')
+def get_category_token(dataset_path, dataset_version, category_name):
+    category_file_path = os.path.join(dataset_path, f'{dataset_version}/category.json')
     
     # Check if the file exists
     if not os.path.exists(category_file_path):
@@ -144,8 +144,8 @@ def get_category_token(dataset_root, category_name):
     print(f"No entry found with category name: {category_name}")
     return None
 
-def read_visibility_json(dataset_root):
-    visibility_file_path = os.path.join(dataset_root, 'v1.0-mini/visibility.json')
+def read_visibility_json(dataset_path, dataset_version):
+    visibility_file_path = os.path.join(dataset_path, f'{dataset_version}/visibility.json')
     
     # Check if the file exists
     if not os.path.exists(visibility_file_path):
@@ -157,8 +157,8 @@ def read_visibility_json(dataset_root):
         visibility_data = json.load(f)
     return visibility_data
 # Function to get the token of channel
-def get_sensor_token(dataset_root, channel="LIDAR_TOP"):
-    sensor_data = read_sensor_json(dataset_root)
+def get_sensor_token(dataset_path, dataset_version, channel="LIDAR_TOP"):
+    sensor_data = read_sensor_json(dataset_path, dataset_version)
     
     if sensor_data is None:
         return None
@@ -171,8 +171,8 @@ def get_sensor_token(dataset_root, channel="LIDAR_TOP"):
     return None
 
 # Function to get the modality of channel
-def get_sensor_modality(dataset_root, channel="LIDAR_TOP"):
-    sensor_data = read_sensor_json(dataset_root)
+def get_sensor_modality(dataset_path, dataset_version, channel="LIDAR_TOP"):
+    sensor_data = read_sensor_json(dataset_path, dataset_version)
     
     if sensor_data is None:
         return None
@@ -185,8 +185,8 @@ def get_sensor_modality(dataset_root, channel="LIDAR_TOP"):
     return None
 
 # Function to get the token of channel
-def get_calibrated_sensor_token(dataset_root, sensor_token):
-    calibrated_sensor_data = read_calibrated_sensor_json(dataset_root)
+def get_calibrated_sensor_token(dataset_path, dataset_version, sensor_token):
+    calibrated_sensor_data = read_calibrated_sensor_json(dataset_path, dataset_version)
     
     if calibrated_sensor_data is None:
         return None
@@ -235,12 +235,12 @@ def process_box_annotation(annotation):
     rot_quat = rot.as_quat(scalar_first=True).tolist()
     return center, wlh, rot_quat, label, score
 
-def process_sample_annotations(dataset_root,sample_annotation, sample_token,visibility_token,attribute_token, threshold=0.4):
+def process_sample_annotations(dataset_path, dataset_version, sample_annotation, sample_token,visibility_token,attribute_token, threshold=0.4):
     sample_annotation_data = []
     for box_annotation in sample_annotation:
         center,lwh,rot,label,score = process_box_annotation(box_annotation)
         ##
-        instance_token = get_instance_token(dataset_root,label)
+        instance_token = get_instance_token(dataset_path, dataset_version,label)
         if score < threshold:
             continue
         sample_annotation_box = {
@@ -258,18 +258,19 @@ def process_sample_annotations(dataset_root,sample_annotation, sample_token,visi
             }
         sample_annotation_data.append(sample_annotation_box)
     return sample_annotation_data
-# Function to create sample.json and sample_data.json
-def create_sample_files(dataset_root):
+
+# Function to create sample.json and sample_data.json and sample_annotation.json
+def create_sample_files(dataset_path, dataset_version):
     
-    scene_file_path = os.path.join(dataset_root, 'v1.0-mini/scene.json')
-    pcd_folder_path = os.path.join(dataset_root, 'samples/LIDAR_TOP')
-    sample_file_path = os.path.join(dataset_root, 'v1.0-mini/sample.json')
-    sample_data_file_path = os.path.join(dataset_root, 'v1.0-mini/sample_data.json')
-    sample_annotation_file_path = os.path.join(dataset_root, 'v1.0-mini/sample_annotation.json')
+    scene_file_path = os.path.join(dataset_path, f'{dataset_version}/scene.json')
+    pcd_folder_path = os.path.join(dataset_path, 'samples/LIDAR_TOP')
+    sample_file_path = os.path.join(dataset_path, f'{dataset_version}/sample.json')
+    sample_data_file_path = os.path.join(dataset_path, f'{dataset_version}/sample_data.json')
+    sample_annotation_file_path = os.path.join(dataset_path, f'{dataset_version}/sample_annotation.json')
     lidar_name = "LIDAR_TOP"
-    sensor_token = get_sensor_token(dataset_root=dataset_root, channel=lidar_name)
-    sensor_modality = get_sensor_modality(dataset_root=dataset_root,channel=lidar_name)
-    calibrated_sensor_token= get_calibrated_sensor_token(dataset_root=dataset_root, sensor_token=sensor_token)
+    sensor_token = get_sensor_token(dataset_path=dataset_path, dataset_version=dataset_version, channel=lidar_name)
+    sensor_modality = get_sensor_modality(dataset_path=dataset_path,dataset_version=dataset_version, channel=lidar_name)
+    calibrated_sensor_token= get_calibrated_sensor_token(dataset_path=dataset_path, dataset_version=dataset_version, sensor_token=sensor_token)
     # Check if the scene.json file exists
     if not os.path.exists(scene_file_path):
         print(f"File not found: {scene_file_path}")
@@ -304,7 +305,7 @@ def create_sample_files(dataset_root):
         sample_data_entry = {
             "token": sample_data_token,
             "sample_token": sample_token,
-            "ego_pose_token": read_ego_pose_json(dataset_root)[0]["token"],  # Replace with actual ego pose token if available
+            "ego_pose_token": read_ego_pose_json(dataset_path, dataset_version)[0]["token"],  # Replace with actual ego pose token if available
             "calibrated_sensor_token": calibrated_sensor_token,  # Replace with actual calibrated sensor token
             "filename": f"samples/{lidar_name}/{pcd_file}",
             "fileformat": "PCD",
@@ -331,11 +332,12 @@ def create_sample_files(dataset_root):
 
         sample_entries.append(sample_entry)
 
-        sample_annotation_entry = process_sample_annotations(dataset_root,
+        sample_annotation_entry = process_sample_annotations(dataset_path,
+                                                             dataset_version,
                                                              annotation_file[pcd_name]["gt_boxes"],
                                                              sample_token=sample_token,
-                                                             visibility_token=read_visibility_json(dataset_root)[0]["token"],
-                                                             attribute_token=read_attribute_json(dataset_root)[0]["token"],
+                                                             visibility_token=read_visibility_json(dataset_path, dataset_version)[0]["token"],
+                                                             attribute_token=read_attribute_json(dataset_path, dataset_version)[0]["token"],
                                                              threshold=0.4)
         sample_annotation_entries.extend(sample_annotation_entry)
         if prev_sample_token!="":
@@ -363,9 +365,23 @@ def create_sample_files(dataset_root):
     print(f"sample_annotation.json created successfully at {sample_annotation_file_path}")
 
 def main():
-    # Replace 'path_to_dataset_root' with the actual path to your dataset root directory
-    dataset_root = '../muenchen'
-    create_sample_files(dataset_root)
+    # Create the parser
+    parser = argparse.ArgumentParser(description="A simple script to read a command-line argument.")
+
+    # Add an argument
+    parser.add_argument('--dataset_path', type=str, help="The input argument to be processed")
+    # Add an argument
+    parser.add_argument('--dataset_version', type=str, help="The input argument to be processed")
+
+    # Parse the arguments
+    args = parser.parse_args()
+
+    
+    # Write visibility data to visibility.json file
+    dataset_path = args.dataset_path
+    dataset_version = args.dataset_version
+    
+    create_sample_files(dataset_path, dataset_version)
 
 if __name__ == "__main__":
     main()

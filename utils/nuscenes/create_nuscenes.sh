@@ -1,14 +1,34 @@
-rm -r ../muenchen/v1.0-mini
-mkdir ../muenchen/v1.0-mini
-python create_visibility.py
-python create_attribute.py
-python create_categories.py
-python create_instance.py
-python create_sensor.py
-python create_log.py
-python create_map.py
-python create_ego_pose.py
-python create_calibrated_sensor.py
-python create_scene.py
-python create_samples_samplesdata_samplesannotation.py
-python update_firstlast.py
+#!/bin/bash
+
+# Check if the .env file exists
+if [ ! -f .env ]; then
+    echo ".env file not found!"
+    exit 1
+fi
+
+# Load environment variables from the .env file
+source .env
+
+# Print the environment variables
+echo "ROOT: $DATASET_ROOT"
+echo "NAME: $DATASET_NAME"
+echo "VERSION": "$DATASET_VERSION"
+DATASET_PATH="$DATASET_ROOT/$DATASET_NAME"
+DATASET_FOLDER="$DATASET_PATH/$DATASET_VERSION"
+echo "VAR2: $DATASET_FOLDER"
+rm -r $DATASET_FOLDER
+mkdir -p $DATASET_FOLDER
+
+python3 create_visibility.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_attribute.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_categories.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_instance.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_sensor.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_log.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_map.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_ego_pose.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_calibrated_sensor.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_scene.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+python3 create_samples_samplesdata_samplesannotation.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+#python3 update_firstlast.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+

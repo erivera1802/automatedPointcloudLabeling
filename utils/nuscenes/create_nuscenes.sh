@@ -13,6 +13,7 @@ source .env
 echo "ROOT: $DATASET_ROOT"
 echo "NAME: $DATASET_NAME"
 echo "VERSION": "$DATASET_VERSION"
+echo "ANNO": "$ANNOTATIONS_PATH"
 DATASET_PATH="$DATASET_ROOT/$DATASET_NAME"
 DATASET_FOLDER="$DATASET_PATH/$DATASET_VERSION"
 echo "VAR2: $DATASET_FOLDER"
@@ -22,7 +23,7 @@ mkdir -p $DATASET_FOLDER
 python3 create_visibility.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 python3 create_attribute.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 python3 create_categories.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
-python3 create_instance.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
+#python3 create_instance.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 python3 create_sensor.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 python3 create_log.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 python3 create_map.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION

@@ -119,12 +119,12 @@ def get_instance_token_from_category(instance_data,category_token):
     
     print(f"No entry found with category token: {category_token}")
     return None
-def get_instance_token(dataset_path,dataset_version, label):
-    label_name = LABEL_DICT[label]
-    category_token = get_category_token(dataset_path=dataset_path, dataset_version=dataset_version, category_name=label_name)
-    instance_data = read_instance_json(dataset_path=dataset_path, dataset_version=dataset_version)
-    instance_token = get_instance_token_from_category(instance_data, category_token)
-    return instance_token
+# def get_instance_token(dataset_path,dataset_version, label):
+#     label_name = LABEL_DICT[label]
+#     category_token = get_category_token(dataset_path=dataset_path, dataset_version=dataset_version, category_name=label_name)
+#     instance_data = read_instance_json(dataset_path=dataset_path, dataset_version=dataset_version)
+#     instance_token = get_instance_token_from_category(instance_data, category_token)
+#     return instance_token
 def get_category_token(dataset_path, dataset_version, category_name):
     category_file_path = os.path.join(dataset_path, f'{dataset_version}/category.json')
     
@@ -249,14 +249,18 @@ def process_box_annotation(annotation):
 
 def process_sample_annotations(dataset_path, dataset_version, sample_annotation, sample_token,visibility_token,attribute_token, threshold=0.4):
     sample_annotation_data = []
+    instance_data = []
     for box_annotation in sample_annotation:
         center,lwh,rot,label,score = process_box_annotation(box_annotation)
         ##
-        instance_token = get_instance_token(dataset_path, dataset_version,label)
+        
         if score < threshold:
             continue
+        category_token = get_category_token(dataset_path, dataset_version,LABEL_DICT[label])
+        instance_token = create_token()
+        sample_annotation_box_token = create_token()
         sample_annotation_box = {
-                "token": create_token(),
+                "token": sample_annotation_box_token,
                 "sample_token": sample_token,
                 "instance_token": instance_token,  # Generate a new instance token for each annotation
                 "visibility_token": visibility_token,  # Assuming visibility info is available
@@ -266,10 +270,26 @@ def process_sample_annotations(dataset_path, dataset_version, sample_annotation,
                 "rotation": rot,
                 "num_lidar_pts": label,
                 "num_radar_pts": score,
+                "prev":"",
                 "next": ""  # Update if there is a link to the next annotation
             }
+        instance_box = {
+            "token": instance_token,
+            "category_token": category_token,
+            "nbr_annotations": 1,
+            "first_annotation_token": sample_annotation_box_token,
+            "last_annotation_token": sample_annotation_box_token
+        }
+
         sample_annotation_data.append(sample_annotation_box)
-    return sample_annotation_data
+        instance_data.append(instance_box)
+    return sample_annotation_data, instance_data
+
+# def category_token(dataset_path,dataset_version, label):
+#     label_name = LABEL_DICT[label]
+#     category_token = get_category_token(dataset_path=dataset_path, dataset_version=dataset_version, category_name=label_name)
+#     return category_token
+
 
 # Function to create sample.json and sample_data.json and sample_annotation.json
 def create_sample_files(dataset_path, dataset_version, annotations_path):
@@ -279,6 +299,7 @@ def create_sample_files(dataset_path, dataset_version, annotations_path):
     sample_file_path = os.path.join(dataset_path, f'{dataset_version}/sample.json')
     sample_data_file_path = os.path.join(dataset_path, f'{dataset_version}/sample_data.json')
     sample_annotation_file_path = os.path.join(dataset_path, f'{dataset_version}/sample_annotation.json')
+    instance_file_path = os.path.join(dataset_path, f'{dataset_version}/instance.json')
     lidar_name = "LIDAR_TOP"
     camera_name = "CAM_FRONT"
     lidar_sensor_token = get_sensor_token(dataset_path=dataset_path, dataset_version=dataset_version, channel=lidar_name)
@@ -310,6 +331,7 @@ def create_sample_files(dataset_path, dataset_version, annotations_path):
     sample_data_entries = []
     sample_entries = []
     sample_annotation_entries = []
+    instance_entries = []
     prev_sample_token = ""
     prev_sample_data_token = ""
     prev_sample_data_camera_token = ""
@@ -371,7 +393,7 @@ def create_sample_files(dataset_path, dataset_version, annotations_path):
 
         sample_entries.append(sample_entry)
 
-        sample_annotation_entry = process_sample_annotations(dataset_path,
+        sample_annotation_entry, instance_entry= process_sample_annotations(dataset_path,
                                                              dataset_version,
                                                              annotation_file[pcd_name]["gt_boxes"],
                                                              sample_token=sample_token,
@@ -379,6 +401,7 @@ def create_sample_files(dataset_path, dataset_version, annotations_path):
                                                              attribute_token=read_attribute_json(dataset_path, dataset_version)[0]["token"],
                                                              threshold=0.4)
         sample_annotation_entries.extend(sample_annotation_entry)
+        instance_entries.extend(instance_entry)
         if prev_sample_token!="":
             sample_entries[-2]["next"] = sample_token
             sample_data_entries[-2]["next"] = sample_data_token
@@ -403,6 +426,12 @@ def create_sample_files(dataset_path, dataset_version, annotations_path):
         json.dump(sample_annotation_entries, f, indent=2)
 
     print(f"sample_annotation.json created successfully at {sample_annotation_file_path}")
+
+    # Write sample_annotation.json
+    with open(instance_file_path, 'w') as f:
+        json.dump(instance_entries, f, indent=2)
+
+    print(f"sample_annotation.json created successfully at {instance_file_path}")
 
 def main():
     # Create the parser

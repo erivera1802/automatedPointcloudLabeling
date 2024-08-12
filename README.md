@@ -1,8 +1,64 @@
 <!-- # MS3D and MS3D++ -->
+# README: Customizing Your Automated Pipeline
 
-Implementation on top of the MS3D github repo
+## Overview
 
-TO-DO
+This document outlines the steps to customize your automated pipeline by changing detectors, adjusting parameters, and configuring class names and mappings.
+
+## Changing Detectors
+
+To update or add new detectors:
+
+1. **Modify the Pipeline Script:**
+   - Open `automated_pipeline.sh` and make the necessary adjustments to incorporate your new detectors.
+
+2. **Add Detectors to Configuration:**
+   - Place your detector configurations in the directory: `tools/cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/pretrained/`.
+
+## Adjusting Parameters
+
+To modify parameters such as thresholds and ensemble configurations:
+
+1. **Open the Configuration File:**
+   - Navigate to `tools/cfgs/target_custom/label_generation/round1_automated_pipeline/cfgs/ps_config.yaml`.
+
+2. **Adjust the Following Parameters:**
+   - **PS_SCORE_TH:**
+     - `POS_TH`
+     - `NEG_TH`
+   - **ENSEMBLE_KBF:**
+     - `DISCARD`
+     - `RADIUS`
+     - `NMS`
+
+   Example:
+   ```yaml
+   PS_SCORE_TH:
+     POS_TH: [0.7, 0.6, 0.5]
+     NEG_TH: [0.3, 0.3, 0.3]
+
+   ENSEMBLE_KBF:
+     DISCARD: [6, 3, 3]
+     RADIUS: [1.5, 0.3, 0.2]
+     NMS: [0.1, 0.3, 0.1]
+   ```
+
+## Adjusting Class Names and Mappings
+
+To update class names and dataset mappings:
+
+1. **Locate the Configuration File:**
+   - Open `tools/cfgs/dataset_configs/custom_dataset_da.yaml`.
+
+2. **Update Class Names and Mappings:**
+   - Modify the relevant sections to reflect any changes in class names or dataset mappings.
+
+## Summary
+
+- **Detectors:** Adjust `automated_pipeline.sh` and add configurations to `pretrained/`.
+- **Parameters:** Update `ps_config.yaml` for thresholds and ensemble settings.
+- **Class Names/Mapping:** Edit `custom_dataset_da.yaml` for class names and mappings.
+
 
 <!-- This is the official code release for
 - **MS3D**: Leveraging Multiple Detectors for Unsupervised Domain Adaptation in 3D Object Detection [[paper](https://arxiv.org/abs/2304.02431)]

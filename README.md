@@ -60,6 +60,24 @@ To update class names and dataset mappings:
 - **Class Names/Mapping:** Edit `custom_dataset_da.yaml` for class names and mappings.
 
 
+## Structure of the folders:
+MS3D
+├── tools
+│   ├── cfgs
+│   │   ├── target_custom # custom is your own dataset
+│   │   |   ├── label_generation
+│   │   |   │   ├── round1
+│   │   |   │   │   ├── cfgs
+│   │   |   │   │   │   ├── ensemble_detections.txt
+│   │   |   │   │   │   ├── ps_config.yaml
+│   │   |   │   │   ├── scripts
+│   │   |   │   │   │   ├── generate_ensemble_preds.sh
+│   │   |   │   │   │   ├── run_ms3d.sh
+│   │   |   │   │   ├── ps_labels # pseudo-labels/tracks are saved here
+│   │   |   │   ├── round2
+│   │   |   │   ├── round3
+│   │   |   │   ├── ...
+
 <!-- This is the official code release for
 - **MS3D**: Leveraging Multiple Detectors for Unsupervised Domain Adaptation in 3D Object Detection [[paper](https://arxiv.org/abs/2304.02431)]
 - **MS3D++**: Ensemble of Experts for Multi-Source Unsupervised Domain Adaptation in 3D Object Detection [[paper](https://arxiv.org/abs/2308.05988)] [[presentation](https://youtu.be/gjOgirSks8I?si=i0SMDmqcOrIB2Y49)]

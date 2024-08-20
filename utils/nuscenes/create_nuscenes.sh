@@ -19,7 +19,7 @@ DATASET_FOLDER="$DATASET_PATH/$DATASET_VERSION"
 echo "VAR2: $DATASET_FOLDER"
 rm -r $DATASET_FOLDER
 mkdir -p $DATASET_FOLDER
-
+#python3 pcd2bin.py --dataset_path $DATASET_PATH --pcd_folder_location $PCD_FOLDER_LOCATION
 python3 create_visibility.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 python3 create_attribute.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION
 python3 create_categories.py --dataset_path $DATASET_PATH --dataset_version $DATASET_VERSION

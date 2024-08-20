@@ -336,12 +336,17 @@ def create_sample_files(dataset_path, dataset_version, annotations_path):
     prev_sample_data_token = ""
     prev_sample_data_camera_token = ""
     
-
+    number_pcds = len(pcd_files)
+    half = int(number_pcds/2)
     for i, pcd_file in enumerate(pcd_files):
+        number_pcds
         sample_token = create_token()
         sample_data_token = create_token()
         sample_data_camera_token = create_token()
-        scene_token = scene_data[0]['token'] 
+        if i < half:
+            scene_token = scene_data[0]['token'] 
+        else:
+            scene_token = scene_data[1]['token'] 
         pcd_name = get_pointcloud_id(pcd_path=pcd_file)
         # Create sample_data entry
         sample_data_entry = {
@@ -353,7 +358,8 @@ def create_sample_files(dataset_path, dataset_version, annotations_path):
             "fileformat": "PCD",
             "width": 0,
             "height": 0,
-            "timestamp": int(pcd_file.split("_")[0]),  # Increment timestamp for simplicity
+            #"timestamp": int(pcd_file.split("_")[0]+pcd_file.split("_")[1].split(".")[0]),  # Increment timestamp for simplicity
+            "timestamp":i,
             "is_key_frame": True,
             "next": "",
             "prev": prev_sample_data_token,

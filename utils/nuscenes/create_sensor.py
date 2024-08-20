@@ -11,7 +11,11 @@ def create_sensors(dataset_path, dataset_version):
     # List of sensors with their channels and modalities
     sensors = [
         {"channel": "LIDAR_TOP", "modality": "lidar"},
-        {"channel": "CAM_FRONT", "modality": "camera"}
+        {"channel": "CAM_FRONT", "modality": "camera"},
+        {"channel": "CAM_FRONT_RIGHT", "modality": "camera"},
+        {"channel": "CAM_FRONT_LEFT", "modality": "camera"},
+        {"channel": "CAM_BACK_RIGHT", "modality": "camera"},
+        {"channel": "CAM_BACK_LEFT", "modality": "camera"},
     ]
 
     # Create sensor JSON structure

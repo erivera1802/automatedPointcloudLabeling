@@ -59,7 +59,7 @@ def create_scene(dataset_path, dataset_version, rides_pcd_path):
     # Create scene JSON structure
             scene_data.append({
                 "token": create_token(),
-                "name": f"scene-{scene_index:03}",
+                "name": f"scene-{scene_index:04}",
                 "description": scene,
                 "log_token": logtoken,
                 "nbr_samples": 5,

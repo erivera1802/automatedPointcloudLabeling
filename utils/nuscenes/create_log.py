@@ -8,26 +8,33 @@ import argparse
 def create_token():
     return str(uuid.uuid4())
 
-def create_log(dataset_path, dataset_version):
-    # Example list of logs with their parameters (replace this with your actual data)
-    logs = [
-        {
-            "logfile": "logs/log1",
-            "vehicle": "EDGAR",
-            "date_captured": "2023-07-30",
-            "location": "muenchen"
-        }
-    ]
+def list_rides(rides_path):
+    # List to store filenames without extension
+    filenames_without_extension = []
+    
+    # Loop through all files in the directory
+    for filename in os.listdir(rides_path):
+        # Split the filename into name and extension
+        name, extension = os.path.splitext(filename)
+        
+        # Append the name without extension to the list
+        filenames_without_extension.append(name)
+        filenames_without_extension.sort()
 
+    return filenames_without_extension
+
+def create_log(dataset_path, dataset_version,rides_pcd_path):
+    # Example list of logs with their parameters (replace this with your actual data)
+    rides = list_rides(rides_pcd_path)
     # Create log JSON structure
     log_data = []
-    for log in logs:
+    for log in rides:
         log_data.append({
             "token": create_token(),
-            "logfile": os.path.join("..", "muenchen", log["logfile"]),
-            "vehicle": log["vehicle"],
-            "date_captured": log["date_captured"],
-            "location": log["location"]
+            "logfile": log,
+            "vehicle": "EDGAR",
+            "date_captured": log[0:10],
+            "location": log.split("_")[3]
         })
 
     # Write log data to log.json file
@@ -44,7 +51,8 @@ if __name__ == "__main__":
     parser.add_argument('--dataset_path', type=str, help="The input argument to be processed")
     # Add an argument
     parser.add_argument('--dataset_version', type=str, help="The input argument to be processed")
-
+        # Add an argument
+    parser.add_argument('--rides_pcd_path', type=str, help="Where the rides with the pcds are located")
     # Parse the arguments
     args = parser.parse_args()
 
@@ -52,5 +60,6 @@ if __name__ == "__main__":
     # Write visibility data to visibility.json file
     dataset_path = args.dataset_path
     dataset_version = args.dataset_version
+    rides_pcd_path = args.rides_pcd_path
     
-    create_log(dataset_path, dataset_version)
+    create_log(dataset_path, dataset_version, rides_pcd_path)

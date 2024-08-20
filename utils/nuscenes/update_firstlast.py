@@ -30,10 +30,19 @@ def read_sample_json(dataset_path, dataset_version):
         sample_data = json.load(f)
     return sample_data
 
+
+def get_sample_token(scene_token, samples):
+    # Loop through each log entry in the JSON data
+    for sample in samples:
+        # Check if the logfile matches the input parameter
+        if sample.get("scene_token") == scene_token:
+            # Return the corresponding token
+            return sample.get("token")
+        
 def update_scene(scenes, samples):
     for i,scene in enumerate(scenes):
-        scene["first_sample_token"]=samples[i]["token"]
-        scene["last_sample_token"]=samples[i]["token"]
+        scene["first_sample_token"]=get_sample_token(scene["token"], samples)
+        scene["last_sample_token"]=get_sample_token(scene["token"], samples)
     
     return scenes
 

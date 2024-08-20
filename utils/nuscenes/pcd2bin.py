@@ -32,7 +32,7 @@ def main():
     # Add an argument
     parser.add_argument('--dataset_version', type=str, help="The input argument to be processed")
     # Add an argument
-    parser.add_argument('--pcd_folder_location', type=str, help="The input argument to be processed")
+    parser.add_argument('--rides_pcd_path', type=str, help="The input argument to be processed")
 
 
     # Parse the arguments
@@ -41,8 +41,7 @@ def main():
     
     # Write visibility data to visibility.json file
     dataset_path = args.dataset_path
-    dataset_version = args.dataset_version
-    pcds_folders_path = args.pcd_folder_location
+    rides_pcd_path = args.rides_pcd_path
     # Replace these with your actual file paths
     output_dir = os.path.join(dataset_path, "samples/LIDAR_TOP")
 
@@ -51,13 +50,16 @@ def main():
 
     # Convert all PCD files in the directory to BIN files
 
-    for dirname in os.listdir(pcds_folders_path):
-        pcds_folder = os.path.join(pcds_folders_path, dirname,"pcd")
-        for filename in os.listdir(pcds_folder):
-            if filename.endswith('.pcd'):
-                pcd_file_path = os.path.join(pcds_folder, filename)
-                bin_file_path = os.path.join(output_dir, filename.replace('.pcd', '.pcd.bin'))
-                convert_pcd_to_bin(pcd_file_path, bin_file_path)
+    for ride in os.listdir(rides_pcd_path):
+        scenes_list = os.path.join(rides_pcd_path, ride)
+        for scene in os.listdir(scenes_list):
+            pcds_path = os.path.join(rides_pcd_path, ride, scene,"pcd")
+            for filename in os.listdir(pcds_path):
+                if filename.endswith('.pcd'):
+                    pcd_file_path = os.path.join(pcds_path, filename)
+                    new_filename = f"{ride}+{scene}+{filename.split('.')[0]}.pcd.bin"
+                    bin_file_path = os.path.join(output_dir, new_filename)
+                    convert_pcd_to_bin(pcd_file_path, bin_file_path)
 
 if __name__ == "__main__":
     main()

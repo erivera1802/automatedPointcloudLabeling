@@ -199,6 +199,14 @@ def get_calibrated_sensor_token(dataset_path, dataset_version, sensor_token):
     print("f{channel} channel not found in calibrated_sensor.json")
     return None
 
+def get_scene_token(scene_name, json_data):
+    # Loop through each log entry in the JSON data
+    for entry in json_data:
+        # Check if the logfile matches the input parameter
+        if entry.get("description") == scene_name:
+            # Return the corresponding token
+            return entry.get("token")
+        
 
 def read_annotation(pickle_path):
     """Function to 3d visualize predicted boxes of a pcd file using the frame_id and score threshold.
@@ -232,7 +240,7 @@ def get_pointcloud_id(pcd_path):
     file_name = pcd_path.split('/')[-1]
     if '_' in file_name:
             file_name = file_name.replace('_','')
-    frame_id = file_name.split('.pcd.bin')[0]
+    frame_id = file_name.split('.pcd.bin')[0].split("+")[-1]
     return frame_id
     
 def process_box_annotation(annotation):
@@ -339,14 +347,15 @@ def create_sample_files(dataset_path, dataset_version, annotations_path):
     number_pcds = len(pcd_files)
     half = int(number_pcds/2)
     for i, pcd_file in enumerate(pcd_files):
-        number_pcds
+        ride,scene,file = pcd_file.split("+")
         sample_token = create_token()
         sample_data_token = create_token()
         sample_data_camera_token = create_token()
-        if i < half:
-            scene_token = scene_data[0]['token'] 
-        else:
-            scene_token = scene_data[1]['token'] 
+        scene_token = get_scene_token(scene, scene_data)
+        # if i < half:
+        #     scene_token = scene_data[0]['token'] 
+        # else:
+        #     scene_token = scene_data[1]['token'] 
         pcd_name = get_pointcloud_id(pcd_path=pcd_file)
         # Create sample_data entry
         sample_data_entry = {
@@ -433,11 +442,11 @@ def create_sample_files(dataset_path, dataset_version, annotations_path):
 
     print(f"sample_annotation.json created successfully at {sample_annotation_file_path}")
 
-    # Write sample_annotation.json
+    # Write instance.json
     with open(instance_file_path, 'w') as f:
         json.dump(instance_entries, f, indent=2)
 
-    print(f"sample_annotation.json created successfully at {instance_file_path}")
+    print(f"instance.json created successfully at {instance_file_path}")
 
 def main():
     # Create the parser

@@ -7,7 +7,7 @@ import argparse
 def create_token():
     return str(uuid.uuid4())
 
-def get_first_log_token(dataset_path, dataset_version):
+def get_log_tokens(dataset_path, dataset_version):
     log_file_path = os.path.join(dataset_path, f'{dataset_version}/log.json')
     
     # Check if the file exists
@@ -20,8 +20,11 @@ def get_first_log_token(dataset_path, dataset_version):
         log_data = json.load(f)
     
     # Return the token of the first log entry if it exists
+    log_tokens = []
     if log_data:
-        return log_data[0]['token']
+        for entry in log_data:
+            log_tokens.append(entry['token'])
+        return log_tokens
     
     print("No log entries found")
     return None
@@ -42,7 +45,7 @@ def create_map(dataset_path, dataset_version):
         map_data.append({
             "token": create_token(),
             "filename": map_entry["filename"],
-            "log_tokens": [get_first_log_token(dataset_path, dataset_version)],
+            "log_tokens": get_log_tokens(dataset_path, dataset_version),
             "category": map_entry["category"]
         })
 

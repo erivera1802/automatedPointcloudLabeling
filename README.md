@@ -1,8 +1,113 @@
 <!-- # MS3D and MS3D++ -->
+# README: Customizing Your Automated Pipeline
 
-Implementation on top of the MS3D github repo
+## Overview
 
-TO-DO
+This document outlines the steps to customize your automated pipeline by changing detectors, adjusting parameters, and configuring class names and mappings.
+
+## Changing Detectors
+
+To update or add new detectors:
+
+1. **Modify the Pipeline Script:**
+   - Open `automated_pipeline.sh` and make the necessary adjustments to incorporate your new detectors.
+
+2. **Add Detectors to Configuration:**
+   - Place your detector configurations in the directory: `tools/cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/pretrained/`.
+
+## Adjusting Parameters
+
+To modify parameters such as thresholds and ensemble configurations:
+
+1. **Open the Configuration File:**
+   - Navigate to `tools/cfgs/target_custom/label_generation/round1_automated_pipeline/cfgs/ps_config.yaml`.
+
+2. **Adjust the Following Parameters:**
+   - **PS_SCORE_TH:**
+     - `POS_TH`
+     - `NEG_TH`
+   - **ENSEMBLE_KBF:**
+     - `DISCARD`
+     - `RADIUS`
+     - `NMS`
+
+   Example:
+   ```yaml
+   PS_SCORE_TH:
+     POS_TH: [0.7, 0.6, 0.5]
+     NEG_TH: [0.3, 0.3, 0.3]
+
+   ENSEMBLE_KBF:
+     DISCARD: [6, 3, 3]
+     RADIUS: [1.5, 0.3, 0.2]
+     NMS: [0.1, 0.3, 0.1]
+   ```
+
+## Adjusting Class Names and Mappings
+
+To update class names and dataset mappings:
+
+1. **Locate the Configuration File:**
+   - Open `tools/cfgs/dataset_configs/custom_dataset_da.yaml`.
+
+2. **Update Class Names and Mappings:**
+   - Modify the relevant sections to reflect any changes in class names or dataset mappings.
+
+## Summary
+
+- **Detectors:** Adjust `automated_pipeline.sh` and add configurations to `pretrained/`.
+- **Parameters:** Update `ps_config.yaml` for thresholds and ensemble settings.
+- **Class Names/Mapping:** Edit `custom_dataset_da.yaml` for class names and mappings.
+
+# README: Folder Structure for MS3D Project
+
+This document describes the folder structure of the MS3D project to help you navigate and understand where to find and place specific files.
+
+
+## Folder Structure
+
+```
+MS3D
+├── tools
+│   ├── cfgs
+│   │   ├── target_custom # This folder contains configurations for your custom dataset
+│   │   │   ├── label_generation
+│   │   │   │   ├── round1
+│   │   │   │   │   ├── cfgs
+│   │   │   │   │   │   ├── ensemble_detections.txt # File for ensemble detection configurations
+│   │   │   │   │   │   ├── ps_config.yaml # File for parameter settings
+│   │   │   │   │   ├── scripts
+│   │   │   │   │   │   ├── generate_ensemble_preds.sh # Script to generate ensemble predictions
+│   │   │   │   │   │   ├── run_ms3d.sh # Script to run the MS3D pipeline
+│   │   │   │   │   ├── ps_labels # Directory where pseudo-labels/tracks are saved
+│   │   │   │   ├── round2
+│   │   │   │   ├── round3
+│   │   │   │   ├── ...
+```
+
+## Directory Details
+
+- **`target_custom/`**: Contains configurations specific to your custom dataset.
+  - **`label_generation/`**: Contains scripts and configurations for label generation.
+    - **`round1/`**: Configuration and scripts for the first round of label generation.
+      - **`cfgs/`**: Contains configuration files.
+        - **`ensemble_detections.txt`**: Configuration file for ensemble detections.
+        - **`ps_config.yaml`**: YAML file for setting parameters such as thresholds and ensemble settings.
+      - **`scripts/`**: Contains executable scripts.
+        - **`generate_ensemble_preds.sh`**: Script for generating ensemble predictions.
+        - **`run_ms3d.sh`**: Main script for running the MS3D pipeline.
+      - **`ps_labels/`**: Directory where pseudo-labels and tracking data are saved.
+    - **`round2/`**, **`round3/`**, **`...`**: Additional rounds for label generation, following a similar structure as `round1`.
+
+## Summary
+
+- **Custom Dataset Configurations**: Located in `target_custom/`.
+- **Label Generation**: Managed in `label_generation/` with multiple rounds available.
+- **Scripts**: Found under `scripts/` for executing different tasks.
+- **Configurations**: Parameters and settings are defined in `cfgs/`.
+
+If you have further questions or need assistance, refer to the documentation: https://github.com/darrenjkt/MS3D/blob/main/docs/AUTO_LABEL_YOUR_DATA.md
+
 
 <!-- This is the official code release for
 - **MS3D**: Leveraging Multiple Detectors for Unsupervised Domain Adaptation in 3D Object Detection [[paper](https://arxiv.org/abs/2304.02431)]

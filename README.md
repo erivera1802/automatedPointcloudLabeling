@@ -99,6 +99,41 @@ MS3D
       - **`ps_labels/`**: Directory where pseudo-labels and tracking data are saved.
     - **`round2/`**, **`round3/`**, **`...`**: Additional rounds for label generation, following a similar structure as `round1`.
 
+## Utils
+### Nuscenes converter
+To train your model easily with mm3ddetection too, we provide a nuscenes converter as well, located in utils/nuscenes. First, create the directory of your dataset, for example "edgar". Inside edgar, create one folder called map and put an image called muenchen.jpg inside it. It doesnt matter which image. Inside edgar, create a folder called samples, and inside samples, create 6 folders called CAM_BACK_LEFT, CAM_BACK_RIGHT, CAM_FRONT, CAM_FRONT_LEFT,CAM_FRONT_RIGHT with a random jpg image inside each of them. You should have this structure:
+
+edgar/
+├─ maps/
+├─ samples/
+│  ├─ CAM_FRONT/
+│  ├─ CAM_BACK_LEFT/
+
+
+If you have the PCDs in .bin.pcd format, copy them inside samples/LIDAR_TOP. If you have the pcds in .pcd format, uncomment the line pdc2bin in create_nuscenes.sh
+
+Now edit the .env accordingly file and run create_nuscenes.sh, you should have the following structure at the end:
+
+edgar/
+├─ maps/
+│  ├─ new_file
+├─ samples/
+│  ├─ CAM_FRONT/
+│  │  ├─ random.jpg
+│  ├─ CAM_BACK_LEFT/
+│  │  ├─ random.jpg
+    ....
+│  ├─ LIDAR_TOP/
+│  │  ├─ ride+scene+timestamp.bin.pcd
+      ....
+├─ v1.0-trainval/
+│  ├─ attribute.json
+│  ├─ calibrated_sensor.json
+│  ├─ sample_annotation
+    .....
+
+Copy v1.0-trainval into v1.0-test, so the api doesnt complain later when creating the data
+
 ## Summary
 
 - **Custom Dataset Configurations**: Located in `target_custom/`.

@@ -25,12 +25,12 @@ def create_calibrated_sensor(dataset_path, dataset_version):
     calibration_data = {
         "LIDAR_TOP": {
             "translation": [0.0, 0.0, 0.0],
-            "rotation": [0.0, 0.0, 0.0, 1.0],
+            "rotation": [1.0, 0.0, 0.0, 0.0],
             "camera_intrinsic": []
         },
         "CAM_FRONT": {
-            "translation": [1.0, 0.0, 1.5],
-            "rotation": [0.0, 0.0, 0.0, 1.0],
+            "translation": [0.0, 0.0, 0.0],
+            "rotation": [1.0, 0.0, 0.0, 0.0],
             "camera_intrinsic": [
                 [1266.417203046554, 0.0, 816.2670197447984],
                 [0.0, 1266.417203046554, 491.5070657929476],
@@ -38,8 +38,8 @@ def create_calibrated_sensor(dataset_path, dataset_version):
             ]
         },
         "CAM_FRONT_LEFT": {
-            "translation": [1.0, 0.0, 1.5],
-            "rotation": [0.0, 0.0, 0.0, 1.0],
+            "translation": [0.0, 0.0, 0.0],
+            "rotation": [1.0, 0.0, 0.0, 0.0],
             "camera_intrinsic": [
                 [1266.417203046554, 0.0, 816.2670197447984],
                 [0.0, 1266.417203046554, 491.5070657929476],
@@ -47,8 +47,8 @@ def create_calibrated_sensor(dataset_path, dataset_version):
             ]
         },
         "CAM_FRONT_RIGHT": {
-            "translation": [1.0, 0.0, 1.5],
-            "rotation": [0.0, 0.0, 0.0, 1.0],
+            "translation": [0.0, 0.0, 0.0],
+            "rotation": [1.0, 0.0, 0.0, 0.0],
             "camera_intrinsic": [
                 [1266.417203046554, 0.0, 816.2670197447984],
                 [0.0, 1266.417203046554, 491.5070657929476],
@@ -56,8 +56,8 @@ def create_calibrated_sensor(dataset_path, dataset_version):
             ]
         },
         "CAM_BACK_LEFT": {
-            "translation": [1.0, 0.0, 1.5],
-            "rotation": [0.0, 0.0, 0.0, 1.0],
+            "translation": [0.0, 0.0, 0.0],
+            "rotation": [1.0, 0.0, 0.0, 0.0],
             "camera_intrinsic": [
                 [1266.417203046554, 0.0, 816.2670197447984],
                 [0.0, 1266.417203046554, 491.5070657929476],
@@ -65,8 +65,8 @@ def create_calibrated_sensor(dataset_path, dataset_version):
             ]
         },
         "CAM_BACK_RIGHT": {
-            "translation": [1.0, 0.0, 1.5],
-            "rotation": [0.0, 0.0, 0.0, 1.0],
+            "translation": [0.0, 0.0, 0.0],
+            "rotation": [1.0, 0.0, 0.0, 0.0],
             "camera_intrinsic": [
                 [1266.417203046554, 0.0, 816.2670197447984],
                 [0.0, 1266.417203046554, 491.5070657929476],

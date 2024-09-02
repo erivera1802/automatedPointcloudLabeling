@@ -14,7 +14,7 @@ def create_ego_pose(dataset_path, dataset_version):
         {
             "timestamp": 1532402928000000,  # Replace with actual timestamp in microseconds
             "translation": [0.0, 0.0, 0.0],  # Replace with actual translation values
-            "rotation": [0.0, 0.0, 0.0, 1.0]  # Replace with actual rotation values (quaternion)
+            "rotation": [1.0, 0.0, 0.0, 0.0]  # Replace with actual rotation values (quaternion)
         }
     ]
 

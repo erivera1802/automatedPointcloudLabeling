@@ -276,8 +276,8 @@ def process_sample_annotations(dataset_path, dataset_version, sample_annotation,
                 "translation": center,
                 "size": lwh,
                 "rotation": rot,
-                "num_lidar_pts": label,
-                "num_radar_pts": score,
+                "num_lidar_pts": 10,
+                "num_radar_pts": 10,
                 "prev":"",
                 "next": ""  # Update if there is a link to the next annotation
             }

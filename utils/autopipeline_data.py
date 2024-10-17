@@ -29,7 +29,7 @@ def main(rosbag_folder_path,rosbag_folder_name, save_dir):
         lidar_folder = os.path.join(sequence_folder, "lidar")
         os.makedirs(lidar_folder, exist_ok=True)
 
-        pcd_file_path_source = os.path.join(rosbag_folder_path, rosbag_folder, "pcd")
+        pcd_file_path_source = os.path.join(rosbag_folder_path, rosbag_folder, "samples","LIDAR_TOP_pcd")
         command_copy = f"cp -r {pcd_file_path_source}/* {lidar_folder}/"
         subprocess.run(command_copy, shell=True, check=True)
         # for id, mcap_file in enumerate(sorted(os.listdir(os.path.join(rosbag_folder_path, rosbag_folder)))):

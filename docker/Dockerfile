@@ -71,3 +71,7 @@ RUN pip install kornia==0.5.8
 RUN pip install torch-scatter==2.1.2
 RUN pip install kiss-icp
 RUN pip install open3d
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

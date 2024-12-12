@@ -39,4 +39,4 @@ services:
     tty: true
     restart: "no"
     privileged: true
-    command: tail -F /dev/null
+    command: bash

@@ -72,6 +72,31 @@ RUN pip install torch-scatter==2.1.2
 RUN pip install kiss-icp
 RUN pip install open3d
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Run project-specific setup commands
+# COPY setup.py /MS3D
+# RUN mkdir /MS3D/pcdet
+# COPY pcdet/version.py /MS3D
+
+COPY . /MS3D
+WORKDIR /MS3D
+
+# Set CUDA environment variables
+ENV CUDA_HOME=/usr/local/cuda
+ENV PATH=$CUDA_HOME/bin:$PATH
+ENV LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+ENV TORCH_CUDA_ARCH_LIST="7.5" 
+
+
+RUN python setup.py develop
+RUN cd tracker
+RUN pip install -e . --user
+RUN cd tools
+RUN git config --global --add safe.directory /MS3D
+
+# ENTRYPOINT ["/bin/bash"]
+
+
+# COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+# RUN chmod +x /usr/local/bin/entrypoint.sh
+# ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

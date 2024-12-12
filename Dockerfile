@@ -73,12 +73,9 @@ RUN pip install kiss-icp
 RUN pip install open3d
 
 
-# Run project-specific setup commands
-# COPY setup.py /MS3D
-# RUN mkdir /MS3D/pcdet
-# COPY pcdet/version.py /MS3D
 
-COPY . /MS3D
+RUN mkdir /MS3D
+COPY setup.py /MS3D
 WORKDIR /MS3D
 
 # Set CUDA environment variables

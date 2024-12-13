@@ -92,8 +92,7 @@ ENV TORCH_CUDA_ARCH_LIST="7.5"
 
 
 RUN python setup.py develop
-RUN cd tracker
-RUN pip install -e . --user
+RUN cd tracker && pip install -e . --user
 RUN git config --global --add safe.directory /MS3D
 
 # ENTRYPOINT ["/bin/bash"]

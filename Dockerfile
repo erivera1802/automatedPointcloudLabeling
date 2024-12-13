@@ -74,10 +74,16 @@ RUN pip install open3d
 
 
 
-RUN mkdir /MS3D
+RUN mkdir -p /MS3D
+RUN mkdir -p /data
 COPY setup.py /MS3D
-WORKDIR /MS3D
+COPY pcdet/ /MS3D/pcdet
+COPY pcdet.egg-info/ /MS3D/pcdet.egg-info/
+COPY tracker/ /MS3D/tracker
 
+
+WORKDIR /MS3D
+RUN ls -la /MS3D
 # Set CUDA environment variables
 ENV CUDA_HOME=/usr/local/cuda
 ENV PATH=$CUDA_HOME/bin:$PATH
@@ -88,7 +94,6 @@ ENV TORCH_CUDA_ARCH_LIST="7.5"
 RUN python setup.py develop
 RUN cd tracker
 RUN pip install -e . --user
-RUN cd tools
 RUN git config --global --add safe.directory /MS3D
 
 # ENTRYPOINT ["/bin/bash"]

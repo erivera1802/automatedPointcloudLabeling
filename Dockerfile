@@ -71,3 +71,33 @@ RUN pip install kornia==0.5.8
 RUN pip install torch-scatter==2.1.2
 RUN pip install kiss-icp
 RUN pip install open3d
+
+
+
+RUN mkdir -p /MS3D
+RUN mkdir -p /data
+COPY setup.py /MS3D
+COPY pcdet/ /MS3D/pcdet
+COPY pcdet.egg-info/ /MS3D/pcdet.egg-info/
+COPY tracker/ /MS3D/tracker
+
+
+WORKDIR /MS3D
+RUN ls -la /MS3D
+# Set CUDA environment variables
+ENV CUDA_HOME=/usr/local/cuda
+ENV PATH=$CUDA_HOME/bin:$PATH
+ENV LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+ENV TORCH_CUDA_ARCH_LIST="7.5" 
+
+
+RUN python setup.py develop
+RUN cd tracker && pip install -e . --user
+RUN git config --global --add safe.directory /MS3D
+
+# ENTRYPOINT ["/bin/bash"]
+
+
+# COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+# RUN chmod +x /usr/local/bin/entrypoint.sh
+# ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

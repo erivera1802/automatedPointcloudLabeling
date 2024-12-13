@@ -10,13 +10,13 @@ Waymo_DATA_PATH="/home/datasets/Waymo"
 garching_DATA_PATH="/home/datasets/garching"
 argo_PATH="/home/altb/datasets/argo2"
 nuscenes_format_garching="/home/altb/pointclouds/nuscenes_format_garching"
-pcd_path_before_formatting="/home/ge48vus/esteban/pseudolabeling/rosbags/pcds"
+pcd_path_before_formatting="/home/ge87nec/pseudo/datasets/nuscenes_format/"
 
 
-CODE_PATH="/home/altb/automatedpclabelling"
+CODE_PATH="/home/ge87nec/psedo/automatedpclabelling"
 #CODE_PATH='/home/altb/OpenPCDet'
 
-GPU_ID="0,1"
+GPU_ID="0"
 
 ENVS="  --env=NVIDIA_VISIBLE_DEVICES=$GPU_ID
         --env=CUDA_VISIBLE_DEVICES=$GPU_ID
@@ -60,3 +60,5 @@ $VISUAL \
 --shm-size=30G \
 --workdir=/MS3D \
 $docker_image  
+
+

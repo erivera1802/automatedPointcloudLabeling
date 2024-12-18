@@ -75,11 +75,14 @@ if __name__ == '__main__':
     parser.add_argument('--len', type=int, default=1, help='set length of data to reduce computation time for debugging')
     parser.add_argument('--save_dir', type=str, default=None, help='Overwrite save dir in the cfg file')
     parser.add_argument('--exp_name', type=str, default=None, help='Overwrite exp_name in the cfg file')
+    parser.add_argument('--save_dir_label', type=str, default=None, help='Overwrite save dir in the cfg file')
+
 
     parser.add_argument('--target_dataset', type=str, default=None, help='select from: nuscenes, waymo_single, waymo_multi, lyft or custom')
     parser.add_argument('--sweeps', type=int, default=1, help='number of accumulated frames including current frame')
 
     args = parser.parse_args()
+
 
     ms3d_configs = yaml.load(open(args.ps_cfg,'r'), Loader=yaml.Loader)
 
@@ -107,7 +110,9 @@ if __name__ == '__main__':
 
     # Combine detection sets into a single set of initial pseudo-labels
     ps_dict = box_fusion_utils.get_initial_pseudo_labels(detection_sets, cls_kbf_config)
-    save_dir = ms3d_configs['SAVE_DIR'] if args.save_dir is None else args.save_dir
+    # save_dir = ms3d_configs['SAVE_DIR'] if args.save_dir is None else args.save_dir
+    save_dir = args.save_dir_label or ms3d_configs['SAVE_DIR']
+    
 
     if args.target_dataset is not None:
         target_cfg = get_target_domain_cfg(cfg, args.target_dataset, args.sweeps)

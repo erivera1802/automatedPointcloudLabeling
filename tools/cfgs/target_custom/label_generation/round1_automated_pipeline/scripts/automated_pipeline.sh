@@ -3,6 +3,22 @@
 #   PATH TO THE AUTOLABEL FOLDER
 CUSTOM_PATH="/MS3D/tools/cfgs/target_custom/label_generation/round1_automated_pipeline"
 
+# Parse command-line arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --save_dir_label)
+      SAVE_DIR="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      exit 1
+      ;;
+  esac
+done
+
+
+
 echo "  "
 echo "PSEDUO-LABELING YOUR CUSTOM DATA"
 echo "  "
@@ -32,7 +48,7 @@ python3 cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/en
 echo "  "
 echo "ENSEMBLING THE DETECTIONS"
 echo "  "
-python3 ensemble_kbf.py --ps_cfg ${CUSTOM_PATH}/cfgs/ps_config.yaml --target_dataset custom 
+python3 ensemble_kbf.py --ps_cfg ${CUSTOM_PATH}/cfgs/ps_config.yaml --target_dataset custom --save_dir_label ${SAVE_DIR}
 
 
 echo "  "

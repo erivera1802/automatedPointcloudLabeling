@@ -5,6 +5,36 @@
 
 This document outlines the steps to customize your automated pipeline by changing detectors, adjusting parameters, and configuring class names and mappings.
 
+## Running the Program
+1. Prepare PCD Data in MS3D Format:
+   If you already have your PCDs in pointclouds_final data, run the following script to prepare the data in MS3D format:
+
+
+   Either you run the following code to process all rosbag folders under pointclouds_final:
+   ```sh
+   python3 utils/autopipeline_data.py --save_dir /MS3D/data/edgar/TO_PSEUDO_LABEL
+   ```
+
+   Or you run the following code to specify the rosbag folder under pointclouds_final:
+   ```sh
+   python3 utils/autopipeline_data.py --rosbag_folder_name 2024_06_27_schwabing_daily_001 --save_dir /MS3D/data/edgar/TO_PSEUDO_LABEL
+   ```
+
+   At the end, you should have your processed data under save_dir.
+  
+
+2. Autolabel PCDs:
+   Inside the Docker container, go to the tools directory, make sure the DIR file path is the same as save_dir and run the automated pipeline script:
+
+   ```sh
+   cd tools
+   bash cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline_general.sh --save_dir_label "path to save the label"
+   ```
+   Once it is completed, you should have the pseudolabels under the "/MS3D/tools/cfgs/target_custom/label_generation/round1_automated_pipeline/ps_labels"
+
+
+
+
 ## Changing Detectors
 
 To update or add new detectors:

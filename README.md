@@ -30,7 +30,7 @@ This document outlines the steps to customize your automated pipeline by changin
    cd tools
    bash cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline_general.sh --save_dir_label "path to save the label"
    ```
-   Once it is completed, you should have the pseudolabels under the "save_dir_label"
+   Once it is completed, you should have the pseudolabels under the "path to save the label"
 
 
 

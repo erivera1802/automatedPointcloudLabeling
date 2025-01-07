@@ -23,16 +23,29 @@ done
 
 echo "Save directory for labels: ${SAVE_DIR}"
 
-# CONVERT RAW ROSBAGS INTO PSEUDOLABEL FORMAT
-python3 cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/auto_lidar_ms3d.py --save_dir "${DIR}"
 
 # Loop through each folder in edgar/data
-for mcap_folder in ${DIR}/*; do
-    # UPDATE [DATA_PATH key of custom_dataset_da.yaml] WITH REGARDING MCAP 
-    python3 cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/update_custom_dataset_da_yaml.py --mcap_path "${mcap_folder}"
+for rosbag_folder in ${DIR}/*; do
+    if [[ -d "$rosbag_folder" ]]; then
+        echo "Processing folder: $rosbag_folder"
 
-    # AUTO-LABEL THE MCAP
-    bash cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline.sh --save_dir_label ${SAVE_DIR}
+        # Step 1: Generate LiDAR odometry
+        echo "Generating LiDAR odometry in $rosbag_folder"
+        cd "$rosbag_folder"
+        bash generate_lidar_odom.sh
+        cd - > /dev/null
+
+        # Step 2: Update YAML configuration
+        echo "Updating YAML configuration for $rosbag_folder"
+        python3 cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/update_custom_dataset_da_yaml.py --mcap_path "$rosbag_folder"
+
+        # Step 3: Run the automated pipeline
+        echo "Running automated pipeline for $rosbag_folder"
+        bash cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline.sh --save_dir_label "${SAVE_DIR}"
+
+    else
+        echo "Skipping $rosbag_folder (not a directory)"
+    fi
 done
 
 echo '  '

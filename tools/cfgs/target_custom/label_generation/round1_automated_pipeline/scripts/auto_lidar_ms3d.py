@@ -24,13 +24,13 @@ for rosbag_folder in os.listdir(save_dir):
     command_lidar_odom =  "bash generate_lidar_odom.sh"
     subprocess.run(command_lidar_odom, shell=True, check=True)
     
-    #run from ms3d folder
-    os.chdir("/MS3D")
-    python_executable = "python3" 
-    module_path = "pcdet.datasets.custom.custom_dataset"
-    rosbag_folder_path = f"{save_dir}/{rosbag_folder}"
-    # print("ROSBcAG FOLDER PATH", rosbag_folder_path)
-    # import pdb;pdb.set_trace()
-    command = [python_executable, "-m", module_path, "create_infos", rosbag_folder_path]
+    # #run from ms3d folder
+    # os.chdir("/MS3D")
+    # python_executable = "python3" 
+    # module_path = "pcdet.datasets.custom.custom_dataset"
+    # rosbag_folder_path = f"{save_dir}/{rosbag_folder}"
+    # # print("ROSBcAG FOLDER PATH", rosbag_folder_path)
+    # # import pdb;pdb.set_trace()
+    # command = [python_executable, "-m", module_path, "create_infos", rosbag_folder_path]
 
-    subprocess.run(command)
+    # subprocess.run(command)

@@ -34,7 +34,7 @@ services:
       - $CODE_PATH:/MS3D
     ipc: host
     shm_size: '30G'
-    working_dir: /MS3D
+    working_dir: /MS3D/tools
     stdin_open: true
     tty: true
     restart: "no"

@@ -1,4 +1,7 @@
 #!/bin/bash
+set -e  # Exit on error
+trap 'echo "Error occurred! Exiting..."; exit 1;' ERR
+
 
 #   PATH TO THE AUTOLABEL FOLDER
 CUSTOM_PATH="/MS3D/tools/cfgs/target_custom/label_generation/round1_automated_pipeline"

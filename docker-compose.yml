@@ -34,9 +34,10 @@ services:
       - $CODE_PATH:/MS3D
     ipc: host
     shm_size: '30G'
-    working_dir: /MS3D
+    working_dir: /MS3D/tools
     stdin_open: true
     tty: true
     restart: "no"
     privileged: true
-    command: bash
+    command: bash /MS3D/tools/cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline_general.sh --save_dir_label ${SAVE_DIR_LABEL}
+    # command: bash

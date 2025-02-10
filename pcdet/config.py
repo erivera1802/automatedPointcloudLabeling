@@ -69,19 +69,30 @@ def merge_new_config(config, new_config):
 
 
 def cfg_from_yaml_file(cfg_file, config):
-    print("cfg_file", cfg_file)
-    print("config", config)
-    print("config", os.getcwd())
+    print("🔹 DEBUG: YAML File Path Given →", cfg_file)
+    print("🔹 DEBUG: Current Working Directory →", os.getcwd())
+    
+
+    # Check if the file exists
+    if not os.path.exists(cfg_file):
+        print("❌ ERROR: YAML file does NOT exist at:", cfg_file)
+        raise FileNotFoundError(f"Config file {cfg_file} not found!")
+
+    # Check if it's a file (not a directory)
+    if not os.path.isfile(cfg_file):
+        print("❌ ERROR: Given path is NOT a file:", cfg_file)
+        raise IsADirectoryError(f"{cfg_file} is a directory, expected a file!")
+
     with open(cfg_file, 'r') as f:
         try:
-            new_config = yaml.safe_load(f, Loader=yaml.FullLoader)
-        except:
             new_config = yaml.safe_load(f)
+        except yaml.YAMLError as e:
+            print("❌ ERROR: Invalid YAML file format!")
+            print("🔹 YAML Error Message:", e)
+            raise
 
-        merge_new_config(config=config, new_config=new_config)
-
+    merge_new_config(config=config, new_config=new_config)
     return config
-
 
 cfg = EasyDict()
 cfg.ROOT_DIR = (Path(__file__).resolve().parent / '../').resolve()

@@ -33,15 +33,17 @@ for rosbag_folder in ${DIR}/*; do
     if [[ -d "$rosbag_folder" ]]; then
         echo "Processing folder: $rosbag_folder"
 
-        # Step 1: Generate .pkl file
-        echo "Generating .pkl file for $rosbag_folder"
-        python3 -m pcdet.datasets.custom.custom_dataset create_infos "$rosbag_folder"
+        
 
-        # Step 2: Generate LiDAR odometry
+        # Step 1: Generate LiDAR odometry
         echo "Generating LiDAR odometry in $rosbag_folder"
         cd "$rosbag_folder"
         bash generate_lidar_odom.sh
         cd - > /dev/null
+
+        # Step 2: Generate .pkl file
+        echo "Generating .pkl file for $rosbag_folder"
+        python3 -m pcdet.datasets.custom.custom_dataset create_infos "$rosbag_folder"
 
         # Step 3: Update YAML configuration
         echo "Updating YAML configuration for $rosbag_folder"

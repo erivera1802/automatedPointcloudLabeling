@@ -32,9 +32,6 @@ echo "Save directory for labels: ${SAVE_DIR}"
 for rosbag_folder in ${DIR}/*; do
     if [[ -d "$rosbag_folder" ]]; then
         echo "Processing folder: $rosbag_folder"
-
-        
-
         # Step 1: Generate LiDAR odometry
         echo "Generating LiDAR odometry in $rosbag_folder"
         cd "$rosbag_folder"
@@ -51,7 +48,7 @@ for rosbag_folder in ${DIR}/*; do
 
         # Step 4: Run the automated pipeline
         echo "Running automated pipeline for $rosbag_folder"
-        bash cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline.sh --save_dir_label "${SAVE_DIR}"
+        bash cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline.sh --save_dir_label "/MS3D/${SAVE_DIR}"
 
     else
         echo "Skipping $rosbag_folder (not a directory)"

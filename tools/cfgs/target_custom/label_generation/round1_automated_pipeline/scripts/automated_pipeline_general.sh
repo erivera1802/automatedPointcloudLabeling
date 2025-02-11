@@ -4,6 +4,7 @@ trap 'echo "Error occurred! Exiting..."; exit 1;' ERR
 
 
 DIR="/MS3D/data/edgar/TO_PSEUDO_LABEL"
+rm -rf ${DIR}/*
 # DIR="/MS3D/data/manual_annotation_edgar"
 SAVE_DIR=""
 

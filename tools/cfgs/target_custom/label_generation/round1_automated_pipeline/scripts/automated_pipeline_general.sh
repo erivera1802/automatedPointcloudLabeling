@@ -4,18 +4,20 @@ trap 'echo "Error occurred! Exiting..."; exit 1;' ERR
 
 
 DIR="/MS3D/data/edgar/TO_PSEUDO_LABEL"
+rm -rf ${DIR}/*
 # DIR="/MS3D/data/manual_annotation_edgar"
 SAVE_DIR=""
-
-# Process rosbag folders and prepare LiDAR data for pseudo-labeling.
-python3 /MS3D/utils/autopipeline_data.py --save_dir "/MS3D/data/edgar/TO_PSEUDO_LABEL"
-
+ROSBAG_FOLDER_NAME=""
 
 # Parse command-line arguments
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --save_dir_label)
       SAVE_DIR="$2"
+      shift 2
+      ;;
+    --rosbag_folder_name)
+      ROSBAG_FOLDER_NAME="$2"
       shift 2
       ;;
     *)
@@ -26,15 +28,14 @@ while [[ $# -gt 0 ]]; do
 done
 
 echo "Save directory for labels: ${SAVE_DIR}"
-
+echo "Processing following scene: ${ROSBAG_FOLDER_NAME}"
+# Process rosbag folders and prepare LiDAR data for pseudo-labeling.
+python3 /MS3D/utils/autopipeline_data.py --save_dir "/MS3D/data/edgar/TO_PSEUDO_LABEL" --rosbag_folder_name "${ROSBAG_FOLDER_NAME}"
 
 # Loop through each folder in edgar/data
 for rosbag_folder in ${DIR}/*; do
     if [[ -d "$rosbag_folder" ]]; then
         echo "Processing folder: $rosbag_folder"
-
-        
-
         # Step 1: Generate LiDAR odometry
         echo "Generating LiDAR odometry in $rosbag_folder"
         cd "$rosbag_folder"
@@ -51,7 +52,7 @@ for rosbag_folder in ${DIR}/*; do
 
         # Step 4: Run the automated pipeline
         echo "Running automated pipeline for $rosbag_folder"
-        bash cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline.sh --save_dir_label "${SAVE_DIR}"
+        bash cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline.sh --save_dir_label "/MS3D/${SAVE_DIR}" 
 
     else
         echo "Skipping $rosbag_folder (not a directory)"

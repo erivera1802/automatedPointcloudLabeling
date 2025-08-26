@@ -9,18 +9,18 @@ services:
       #  - GID=${GID}
     container_name: ms3d
     network_mode: host
-    environment:
-      - DISPLAY=${DISPLAY}
-      - NVIDIA_VISIBLE_DEVICES=$GPU_ID
-      - CUDA_VISIBLE_DEVICES=$GPU_ID
-      #- NVIDIA_DRIVER_CAPABILITIES=all"
-    runtime: nvidia
-    # # deploy:
-    # #   resources:
-    # #     reservations:
-    # #       devices:
-    # #         - driver: nvidia
-    # #           count: $GPU_ID
+    # environment:
+    #   - DISPLAY=${DISPLAY}
+    #   - NVIDIA_VISIBLE_DEVICES=$GPU_ID
+    #   - CUDA_VISIBLE_DEVICES=$GPU_ID
+      # - NVIDIA_DRIVER_CAPABILITIES=all
+    # runtime: nvidia
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: $GPU_ID
     volumes:
       - /tmp/.X11-unix/:/tmp/.X11-unix/
       - /dev/shm:/dev/shm
@@ -39,5 +39,5 @@ services:
     tty: true
     restart: "no"
     privileged: true
-    command: bash /MS3D/tools/cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline_general.sh --save_dir_label ${SAVE_DIR_LABEL} --rosbag_folder_name ${SCENE_NAME}
-    # command: bash
+    #command: bash /MS3D/tools/cfgs/target_custom/label_generation/round1_automated_pipeline/scripts/automated_pipeline_general.sh --save_dir_label ${SAVE_DIR_LABEL} --rosbag_folder_name ${SCENE_NAME}
+    command: bash

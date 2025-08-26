@@ -78,24 +78,25 @@ RUN mkdir -p /MS3D
 RUN mkdir -p /data
 COPY setup.py /MS3D
 COPY pcdet/ /MS3D/pcdet
-COPY pcdet.egg-info/ /MS3D/pcdet.egg-info/
+#COPY pcdet.egg-info/ /MS3D/pcdet.egg-info/
 COPY tracker/ /MS3D/tracker
 
 
 WORKDIR /MS3D
-RUN ls -la /MS3D
-# Set CUDA environment variables
-ENV CUDA_HOME=/usr/local/cuda
-ENV PATH=$CUDA_HOME/bin:$PATH
-ENV LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
-ENV TORCH_CUDA_ARCH_LIST="7.5" 
+# RUN ls -la /MS3D
+# # Set CUDA environment variables
+# ENV CUDA_HOME=/usr/local/cuda
+# ENV PATH=$CUDA_HOME/bin:$PATH
+# ENV LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+# #ENV TORCH_CUDA_ARCH_LIST="7.5" 
 
 
-RUN python setup.py develop
-RUN cd tracker && pip install -e . --user
-RUN git config --global --add safe.directory /MS3D
-
-# ENTRYPOINT ["/bin/bash"]
+# RUN python setup.py develop
+# RUN cd tracker && pip install -e . --user
+# RUN git config --global --add safe.directory /MS3D
+COPY entrypoint.sh /MS3D/entrypoint.sh
+RUN chmod +x /MS3D/entrypoint.sh
+# RUN /MS3D/entrypoint.sh
 
 
 # COPY entrypoint.sh /usr/local/bin/entrypoint.sh
